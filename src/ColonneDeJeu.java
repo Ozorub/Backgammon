@@ -55,11 +55,11 @@ public class ColonneDeJeu extends Button {
         String imageUrl;
         if (this.nbPionsBlanc > 0){
             nbButtonToAdd = this.nbPionsBlanc;
-            imageUrl = "pionBlanc.png";
+            imageUrl = "file:Assets/rond_blanc.png";
         }
         else{
             nbButtonToAdd = this.nbPionsNoir;
-            imageUrl = "pionNoir.png";
+            imageUrl = "file:Assets/rond_noir.png";
         }
 
         if (nbButtonToAdd > 5){
