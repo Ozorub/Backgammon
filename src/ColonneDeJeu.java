@@ -87,6 +87,7 @@ public class ColonneDeJeu extends Button {
     protected ColonneDeJeu(){
         super();
         this.setGraphic(vbox);
+        Platform.runLater(this::updateGraphics);
     }
 
 
