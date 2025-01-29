@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Classe représentant une colonne de jeu
- * @version 1.0
+ * @version 1.1
  * @author Raphaël Charozé
  */
 public class ColonneDeJeu extends Button {
@@ -51,8 +51,8 @@ public class ColonneDeJeu extends Button {
      */
     private void updateGraphics(){
         this.vbox.getChildren().clear();
-        int nbButtonToAdd = 0;
-        String imageUrl = "";
+        int nbButtonToAdd;
+        String imageUrl;
         if (this.nbPionsBlanc > 0){
             nbButtonToAdd = this.nbPionsBlanc;
             imageUrl = "pionBlanc.png";
