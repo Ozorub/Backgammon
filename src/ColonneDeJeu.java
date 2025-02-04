@@ -1,27 +1,79 @@
 import javafx.application.Platform;
-import javafx.scene.control.Button;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+
 
 /**
  * Classe représentant une colonne de jeu
- * @version 1.1
+ * @version 1.1             1.2 avec les rectangles? ?
  * @author Raphaël Charozé
  */
-public class ColonneDeJeu extends Button {
-
-    VBox vbox = new VBox();
+public class ColonneDeJeu extends StackPane {
+    Rectangle fond;
+    Polygon triangle;
+    VBox vBox;
+    double HEIGHT = 400.;
+    double WIDTH = 100.;
 
     private int nbPionsNoir = 0;
     private int nbPionsBlanc = 0;
 
+
+    protected ColonneDeJeu(){
+        //super();
+
+
+
+        // Création du fond
+        fond = new Rectangle();
+        fond.setFill(Color.MAROON);
+        fond.setHeight(HEIGHT);
+        fond.setWidth(WIDTH);
+        this.getChildren().add(fond);
+
+        // Création du triangle
+        triangle = new Polygon();
+        triangle.setFill(Color.BLUE);
+
+        // Définition des sommets du triangle
+        triangle.getPoints().addAll(
+                0.0, 0.0,         // Coin supérieur gauche
+                WIDTH, 0.0,       // Coin supérieur droit
+                WIDTH / 2, HEIGHT // Pointe inférieure centrale
+        );
+        this.getChildren().add(triangle);
+
+        //Création de la VBox
+        vBox= new VBox();
+        vBox.setAlignment(Pos.TOP_CENTER);
+        this.getChildren().add(vBox);
+
+
+        //Platform.runLater(this::updateGraphics);
+
+
+    }
+
+
+
+    protected void updateRectangleSimple(){ // Changer et mettre à qui ajouter les pions ? Pas forcemmenet ce sera directement fait dans le "tour" de la personne
+            String imageUrl = "file:Assets/rond_noir.png";
+            this.getChildren().add(new ImageView(new Image(imageUrl)));
+
+
+    }
     /**
-     * Modifie le contenu interne du bouton en fonction du joueur qui a joué, puis met à jour le contenu graphique
+     * Modifie le contenu interne du rectangle en fonction du joueur qui a joué, puis met à jour le contenu graphique
      * Attention : ne vérifie pas que le coup est valide par rapport au lancer de dés !!!
      */
-    protected void updateButton(Joueur j, boolean firstClicked) throws Exception{
+    protected void updateRectangle(BgPane bgPane, Joueur j, boolean firstClicked) throws Exception{
         if (j == Joueur.BLANC){ // Si le joueur est blanc
             if (firstClicked){
                 if (this.nbPionsBlanc == 0) throw new Exception("Pas de pions blancs dans cette colonne");
@@ -50,7 +102,7 @@ public class ColonneDeJeu extends Button {
      * Modifie le contenu graphique du bouton en fonction du nombre de pions
      */
     private void updateGraphics(){
-        this.vbox.getChildren().clear();
+        this.getChildren().clear();
         int nbButtonToAdd;
         String imageUrl;
         if (this.nbPionsBlanc > 0){
@@ -63,12 +115,12 @@ public class ColonneDeJeu extends Button {
         }
 
         if (nbButtonToAdd > 5){
-            this.vbox.getChildren().add(new ImageView(new Image(imageUrl)));
-            this.vbox.getChildren().add(new Label(String.valueOf(nbButtonToAdd)));
+            this.getChildren().add(new ImageView(new Image(imageUrl)));
+            this.getChildren().add(new Label(String.valueOf(nbButtonToAdd)));
 
         }else {
             for (int i = 0; i < nbButtonToAdd; i++) {
-                this.vbox.getChildren().add(new ImageView(new Image(imageUrl)));
+                this.getChildren().add(new ImageView(new Image(imageUrl)));
             }
         }
     }
@@ -84,11 +136,7 @@ public class ColonneDeJeu extends Button {
 
     }
 
-    protected ColonneDeJeu(){
-        super();
-        this.setGraphic(vbox);
-        Platform.runLater(this::updateGraphics);
-    }
+
 
 
 

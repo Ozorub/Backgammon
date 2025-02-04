@@ -10,6 +10,7 @@ public class Main extends Application {
         BgPane mPane = new BgPane();
         Scene scene = new Scene(mPane);
 
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();
