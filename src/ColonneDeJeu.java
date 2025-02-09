@@ -19,8 +19,10 @@ public class ColonneDeJeu extends StackPane {
     Rectangle fond;
     Polygon triangle;
     VBox vBox;
-    double HEIGHT = 400.;
-    double WIDTH = 100.;
+    double HEIGHT = 370.;
+    double WIDTH = 90.;
+    ImageView rondBlanc;
+    ImageView rondNoir;
 
     private int nbPionsNoir = 0;
     private int nbPionsBlanc = 0;
@@ -33,14 +35,14 @@ public class ColonneDeJeu extends StackPane {
 
         // Création du fond
         fond = new Rectangle();
-        fond.setFill(Color.MAROON);
+        fond.setFill(Color.BURLYWOOD);
         fond.setHeight(HEIGHT);
         fond.setWidth(WIDTH);
         this.getChildren().add(fond);
 
         // Création du triangle
         triangle = new Polygon();
-        triangle.setFill(Color.BLUE);
+        triangle.setFill(Color.STEELBLUE);
 
         // Définition des sommets du triangle
         triangle.getPoints().addAll(
@@ -136,8 +138,46 @@ public class ColonneDeJeu extends StackPane {
 
     }
 
+//    public void setNbPionsNoir(int nb){
+//        nbPionsNoir = nb;
+//    }
+//
+//    public void setNbPionsBlanc(int nb){
+//        nbPionsBlanc = nb;
+//    }
 
+    /**
+     * Les deux méthodes qui suivent permettent de remplir une colonne avec un nombre {@param nb}souhaité de pions, blancs ou noirs
+     */
+    public void setColBlanc(int nb){
+        for(int i =0;i <nb;i++){
+            setRondBlanc();
+            this.vBox.getChildren().add(rondBlanc);
+        }
+        nbPionsBlanc = nb ;
+    }
 
+    public void setColNoir(int nb){
+        for(int i =0;i <nb;i++){
+            setRondNoir();
+            this.vBox.getChildren().add(rondNoir);
+        }
+        nbPionsNoir = nb;
+    }
+
+    /**
+     * Les méthodes qui suivent donnent les dimensions des pions
+     */
+    public void setRondBlanc(){
+        rondBlanc = new ImageView(new Image("file:Assets/rond_blanc.png"));
+        rondBlanc.setFitWidth(this.WIDTH-20);
+        rondBlanc.setPreserveRatio(true);
+    }
+    public void setRondNoir(){
+        rondNoir = new ImageView(new Image("file:Assets/rond_noir.png"));
+        rondNoir.setFitWidth(this.WIDTH-20);
+        rondNoir.setPreserveRatio(true);
+    }
 
 
 }

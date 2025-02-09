@@ -1,7 +1,4 @@
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -16,40 +13,15 @@ public class BgPane extends BorderPane {
     public static final int NBCOL = 12;
     public static final int NBROW = 2;
     TextField textDe = new TextField();
-    ImageView rondBlanc;
-    ImageView rondNoir;
     GridPane plateau;
     ColonneDeJeu colonneDeJeu;
-
-
-    public void setUpGame() {
-
-
-    }
-    public void placer(ImageView iv, GridPane gp, ColonneDeJeu colonneDeJeu){
-        GridPane.setRowIndex(iv, GridPane.getRowIndex(colonneDeJeu));
-        GridPane.setColumnIndex(iv, GridPane.getColumnIndex(colonneDeJeu));
-        iv.setFitWidth(50);
-        iv.setPreserveRatio(true);
-
-        colonneDeJeu.getChildren().addAll(iv);
-    }
-
-
-
 
     public BgPane() {
         plateau = new GridPane();
 
         for(int col = 0 ; col< NBCOL ; col ++){
             for(int row = 0; row< NBROW; row ++){
-                rondBlanc = new ImageView(new Image("file:Assets/rond_blanc.png"));
-                rondNoir = new ImageView(new Image("file:Assets/rond_noir.png"));
                 colonneDeJeu = new ColonneDeJeu();
-                rondBlanc.setFitWidth(colonneDeJeu.WIDTH-20);
-                rondNoir.setFitWidth(colonneDeJeu.HEIGHT-20);
-                rondBlanc.setPreserveRatio(true);
-                rondNoir.setPreserveRatio(true);
                 if(row==0) {
                     if (col%2==0) colonneDeJeu.triangle.setFill((Color.BLACK));
                 }else{
@@ -59,13 +31,13 @@ public class BgPane extends BorderPane {
                 GridPane.setRowIndex(colonneDeJeu, row);
                 GridPane.setColumnIndex(colonneDeJeu, col);
                 plateau.getChildren().addAll(colonneDeJeu);
-                if(row==1) {
-                    getColonneDeJeu(plateau,row,col).vBox.getChildren().add(rondBlanc);
 
-                }
 
             }
         }
+        setBordPlateau(plateau);
+        setUpGame(plateau);
+
         this.setCenter(plateau);
         this.setRight(textDe);
 
@@ -83,6 +55,48 @@ public class BgPane extends BorderPane {
             }
         }
         return null;
+    }
+
+    /**
+     * Méthode qui ajoute les contours noirs au plateau
+     */
+
+    public void setBordPlateau(GridPane gp){
+        for(int col = 0 ; col< NBCOL ; col ++) {
+            for (int row = 0; row < NBROW; row++) {
+                getColonneDeJeu(gp,row,col).setStyle("-fx-border-color:  black; -fx-border-width: 10 0 0 0;");
+            }
+        }
+        getColonneDeJeu(gp,0,6).setStyle("-fx-border-color:  black; -fx-border-width: 10 0 0 5;");
+        getColonneDeJeu(gp,0,5).setStyle("-fx-border-color:  black; -fx-border-width: 10 5 0 0;");
+        getColonneDeJeu(gp,1,5).setStyle("-fx-border-color:  black; -fx-border-width: 10 0 0 5;"); // la ligne d'en bas est retournée
+        getColonneDeJeu(gp,1,6).setStyle("-fx-border-color:  black; -fx-border-width: 10 5 0 0;");
+        getColonneDeJeu(gp,0,0).setStyle("-fx-border-color:  black; -fx-border-width: 10 0 0 10;");
+        getColonneDeJeu(gp,0,11).setStyle("-fx-border-color:  black; -fx-border-width: 10 10 0 0;");
+        getColonneDeJeu(gp,1,11).setStyle("-fx-border-color:  black; -fx-border-width: 10 0 0 10;");
+        getColonneDeJeu(gp,1,0).setStyle("-fx-border-color:  black; -fx-border-width: 10 10 0 0;");
+
+    }
+
+    /**
+     * Méthode qui dispose le plateau de jeu dans la disposition de base
+     */
+    public void setUpGame(GridPane gp) {
+        getColonneDeJeu(gp,0,0).setColBlanc(5);
+        getColonneDeJeu(gp,0,4).setColNoir(3);
+        getColonneDeJeu(gp,0,6).setColNoir(5);
+        getColonneDeJeu(gp,0,11).setColBlanc(2);
+        getColonneDeJeu(gp,1,0).setColNoir(5);
+        getColonneDeJeu(gp,1,4).setColBlanc(3);
+        getColonneDeJeu(gp,1,6).setColBlanc(5);
+        getColonneDeJeu(gp,1,11).setColNoir(2);
+
+
+
+
+
+
+
     }
 
 }
