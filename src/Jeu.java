@@ -56,11 +56,7 @@ public class Jeu {
             while(!finDuTour) {
                 //finDuTour = !canPlay(currentJoueur, lancer);
             }
-
-
-            if(playerWon(currentJoueur)){
-                finDuJeu = true;
-            }
+            //not really useful need to check usefulness
         }
 
         //TODO : sortir du jeu
@@ -135,14 +131,6 @@ public class Jeu {
         catch (Exception exception) {
             exception.printStackTrace();
         }
-    }
-
-    private boolean canPlay(Joueur joueur, int[] des){
-        return false; //TODO
-    }
-
-    private boolean playerWon(Joueur joueur){
-        return false; //TODO
     }
 
     public void lancerDes(){
