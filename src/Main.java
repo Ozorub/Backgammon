@@ -4,11 +4,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static Jeu JEU;
+
     @Override
     public void start(Stage stage){
         stage.setTitle("Backgammon du tonnerre");
-        BgPane mPane = new BgPane();
-        Scene scene = new Scene(mPane);
+        //BgPane mPane = new BgPane();
+        //Scene scene = new Scene(mPane);
+
+        JEU = new Jeu();
+        Scene scene = new Scene(JEU.getPlateau());
 
         stage.setResizable(true);
         stage.setScene(scene);
@@ -19,7 +24,12 @@ public class Main extends Application {
     }
 
     public static void main(String[] args){
+
         launch(args);
-        System.out.println("Hello world");
+
+        Thread t = new Thread(() -> JEU.jouer());
+        JEU.jouer();
+        //t.start();
+
     }
 }

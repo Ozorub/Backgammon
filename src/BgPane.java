@@ -1,8 +1,10 @@
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 
 
 /**
@@ -12,9 +14,20 @@ import javafx.scene.paint.Color;
 public class BgPane extends BorderPane {
     public static final int NBCOL = 12;
     public static final int NBROW = 2;
-    TextField textDe = new TextField();
     GridPane plateau;
     ColonneDeJeu colonneDeJeu;
+
+    public ColonneDeJeu getPrisonNoir() {
+        return prisonNoir;
+    }
+
+    public ColonneDeJeu getPrisonBlanc() {
+        return prisonBlanc;
+    }
+
+    private ColonneDeJeu prisonBlanc;
+    private ColonneDeJeu prisonNoir;
+
 
     public BgPane() {
         plateau = new GridPane();
@@ -22,6 +35,8 @@ public class BgPane extends BorderPane {
         for(int col = 0 ; col< NBCOL ; col ++){
             for(int row = 0; row< NBROW; row ++){
                 colonneDeJeu = new ColonneDeJeu();
+                colonneDeJeu.setCol(col);
+                colonneDeJeu.setRow(row);
                 if(row==0) {
                     if (col%2==0) colonneDeJeu.triangle.setFill((Color.BLACK));
                 }else{
@@ -39,7 +54,56 @@ public class BgPane extends BorderPane {
         setUpGame(plateau);
 
         this.setCenter(plateau);
-        this.setRight(textDe);
+
+
+        VBox prisons = new VBox();
+        prisonBlanc = new ColonneDeJeu();
+        prisonBlanc.fond.setFill(Color.WHITE);
+        prisonBlanc.triangle.setFill(Color.WHITE);
+        prisonBlanc.setColBlanc(0);
+        prisonNoir = new ColonneDeJeu();
+        prisonNoir.fond.setFill(Color.WHITE);
+        prisonNoir.triangle.setFill(Color.WHITE);
+        prisonNoir.setColNoir(0);
+
+        prisonNoir.setRow(100);
+        prisonBlanc.setRow(100);
+        prisonNoir.setCol(100);
+        prisonBlanc.setCol(100);
+
+        prisons.getChildren().addAll(prisonBlanc,prisonNoir);
+
+
+        this.setRight(prisons);
+
+
+        VBox dice = new VBox();
+        Label de1 = new Label("Dé 1: pas lancé");
+        Label de2 = new Label("Dé 2: pas lancé");
+        Button lancer = new Button("Lancer les dés");
+
+        lancer.setOnAction(e -> {
+            if (Main.JEU.getResteDes().isEmpty()) {
+                Main.JEU.lancerDes();
+                de1.setText("Dé 1 : "+Main.JEU.valeurDes()[0]);
+                de2.setText("Dé 2 : "+Main.JEU.valeurDes()[1]);
+
+                ArrayList<Integer> nouvelleListe = new ArrayList<>();
+                nouvelleListe.add(Main.JEU.valeurDes()[0]);
+                nouvelleListe.add(Main.JEU.valeurDes()[1]);
+                if (Main.JEU.valeurDes()[0] == Main.JEU.valeurDes()[1]) {
+                    nouvelleListe.add(Main.JEU.valeurDes()[0]);
+                    nouvelleListe.add(Main.JEU.valeurDes()[1]);
+                }
+
+                Main.JEU.setDesLances(true);
+                Main.JEU.setResteDes(nouvelleListe);
+            }
+        });
+
+        dice.getChildren().addAll(de1,de2,lancer);
+
+        this.setLeft(dice);
 
     }
     /**
@@ -90,13 +154,6 @@ public class BgPane extends BorderPane {
         getColonneDeJeu(gp,1,4).setColBlanc(3);
         getColonneDeJeu(gp,1,6).setColBlanc(5);
         getColonneDeJeu(gp,1,11).setColNoir(2);
-
-
-
-
-
-
-
     }
 
 }

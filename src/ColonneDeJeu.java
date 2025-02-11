@@ -1,4 +1,3 @@
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -21,8 +20,33 @@ public class ColonneDeJeu extends StackPane {
     VBox vBox;
     double HEIGHT = 370.;
     double WIDTH = 90.;
-    ImageView rondBlanc;
-    ImageView rondNoir;
+    ImageView rond;
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    private int row;
+
+    public int getCol() {
+        return col;
+    }
+    public void setCol(int col) {
+        this.col = col;
+    }
+    private int col;
+
+    public int getNbPionsNoir() {
+        return nbPionsNoir;
+    }
+
+    public int getNbPionsBlanc() {
+        return nbPionsBlanc;
+    }
 
     private int nbPionsNoir = 0;
     private int nbPionsBlanc = 0;
@@ -30,8 +54,6 @@ public class ColonneDeJeu extends StackPane {
 
     protected ColonneDeJeu(){
         //super();
-
-
 
         // Création du fond
         fond = new Rectangle();
@@ -57,10 +79,27 @@ public class ColonneDeJeu extends StackPane {
         vBox.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(vBox);
 
+        this.updateGraphics();
 
-        //Platform.runLater(this::updateGraphics);
+        vBox.setOnMouseClicked((e) -> {
+            try {
+                if (Main.JEU.getCol1() == null) {
+                    Main.JEU.setCol1(this);
+                } else if (Main.JEU.getCol2() == null) {
+                    Main.JEU.setCol2(this);
+                }
+                if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
+                    Main.JEU.bougerPion();
 
+                    Main.JEU.setCol1(null);
+                    Main.JEU.setCol2(null);
 
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+        
     }
 
 
@@ -75,28 +114,45 @@ public class ColonneDeJeu extends StackPane {
      * Modifie le contenu interne du rectangle en fonction du joueur qui a joué, puis met à jour le contenu graphique
      * Attention : ne vérifie pas que le coup est valide par rapport au lancer de dés !!!
      */
-    protected void updateRectangle(BgPane bgPane, Joueur j, boolean firstClicked) throws Exception{
-        if (j == Joueur.BLANC){ // Si le joueur est blanc
-            if (firstClicked){
-                if (this.nbPionsBlanc == 0) throw new Exception("Pas de pions blancs dans cette colonne");
-                this.nbPionsBlanc--;
-            }else{
-                if (this.nbPionsNoir > 1) throw new Exception("Il y a déjà des pions noirs dans cette colonne");
-                if (this.nbPionsNoir == 1) ajouterPionPrison("NOIR");
-                this.nbPionsBlanc++;
+    protected void updateRectangle(Joueur j, ColonneDeJeu col2) {
+        if (j == Joueur.BLANC) { // Si le joueur est blanc
+            if (this.nbPionsBlanc == 0) {
+                System.out.println("Pas de pions blancs dans cette colonne");
+            } else {
+                if (col2.nbPionsNoir > 1) {
+                    System.out.println("Il y a déjà des pions noirs dans cette colonne");
+                } else if (col2.nbPionsNoir == 1) {
+                    this.nbPionsBlanc--;
+                    col2.nbPionsBlanc++;
+                    col2.nbPionsNoir--;
+                    Main.JEU.getPlateau().getPrisonNoir().setColNoir(Main.JEU.getPlateau().getPrisonNoir().getNbPionsNoir() + 1);
+
+                } else {
+                    this.nbPionsBlanc--;
+                    col2.nbPionsBlanc++;
+                }
             }
-        }else{
-            if (firstClicked){
-                if (this.nbPionsNoir == 0) throw new Exception("Pas de pions noirs dans cette colonne");
-                this.nbPionsNoir--;
-            }else{
-                if (this.nbPionsBlanc > 1) throw new Exception("Il y a déjà des pions blancs dans cette colonne");
-                if (this.nbPionsBlanc == 1) ajouterPionPrison("BLANC");
-                this.nbPionsNoir++;
+        } else {
+            if (this.nbPionsNoir == 0) {
+                System.out.println("Pas de pions noirs dans cette colonne");
+            } else {
+                if (col2.nbPionsBlanc > 1) {
+                    System.out.println("Il y a déjà des pions blancs dans cette colonne");
+                } else if (col2.nbPionsBlanc == 1) {
+                    this.nbPionsNoir--;
+                    col2.nbPionsNoir++;
+                    col2.nbPionsBlanc--;
+                    Main.JEU.getPlateau().getPrisonBlanc().setColBlanc(Main.JEU.getPlateau().getPrisonBlanc().getNbPionsBlanc() + 1);
+                } else {
+                    this.nbPionsNoir--;
+                    col2.nbPionsNoir++;
+                }
             }
         }
 
-        Platform.runLater(this::updateGraphics);
+
+        this.updateGraphics();
+        col2.updateGraphics();
 
     }
 
@@ -104,7 +160,7 @@ public class ColonneDeJeu extends StackPane {
      * Modifie le contenu graphique du bouton en fonction du nombre de pions
      */
     private void updateGraphics(){
-        this.getChildren().clear();
+        this.vBox.getChildren().clear();
         int nbButtonToAdd;
         String imageUrl;
         if (this.nbPionsBlanc > 0){
@@ -117,26 +173,28 @@ public class ColonneDeJeu extends StackPane {
         }
 
         if (nbButtonToAdd > 5){
-            this.getChildren().add(new ImageView(new Image(imageUrl)));
-            this.getChildren().add(new Label(String.valueOf(nbButtonToAdd)));
+            rond = new ImageView(new Image(imageUrl));
+            rond.setFitWidth(this.WIDTH-20);
+            rond.setPreserveRatio(true);
+            this.vBox.getChildren().add(rond);
+
+            Label label = new Label(String.valueOf(nbButtonToAdd));
+            label.setTextFill(Color.WHITE);
+            label.setStyle("-fx-font-size: 50px");
+            if (row == 1) label.rotateProperty().set(180);
+
+            this.vBox.getChildren().add(label);
 
         }else {
             for (int i = 0; i < nbButtonToAdd; i++) {
-                this.getChildren().add(new ImageView(new Image(imageUrl)));
+                rond = new ImageView(new Image(imageUrl));
+                rond.setFitWidth(this.WIDTH-20);
+                rond.setPreserveRatio(true);
+                this.vBox.getChildren().add(rond);
             }
         }
     }
 
-    /**
-     * Ajoute un pion dans la prison
-     */
-    private void ajouterPionPrison(String couleur) {
-        if (couleur.equals("BLANC")) this.nbPionsBlanc--;
-        else this.nbPionsNoir--;
-
-        //TODO : ajouter a la prison, prison est une ColonneDeJeu, mais instancié où ?
-
-    }
 
 //    public void setNbPionsNoir(int nb){
 //        nbPionsNoir = nb;
@@ -150,34 +208,20 @@ public class ColonneDeJeu extends StackPane {
      * Les deux méthodes qui suivent permettent de remplir une colonne avec un nombre {@param nb}souhaité de pions, blancs ou noirs
      */
     public void setColBlanc(int nb){
-        for(int i =0;i <nb;i++){
+        /**for(int i =0;i <nb;i++){
             setRondBlanc();
             this.vBox.getChildren().add(rondBlanc);
-        }
+        }*/
         nbPionsBlanc = nb ;
+        this.updateGraphics();
     }
 
     public void setColNoir(int nb){
-        for(int i =0;i <nb;i++){
+        /**for(int i =0;i <nb;i++){
             setRondNoir();
             this.vBox.getChildren().add(rondNoir);
-        }
+        }*/
         nbPionsNoir = nb;
+        this.updateGraphics();
     }
-
-    /**
-     * Les méthodes qui suivent donnent les dimensions des pions
-     */
-    public void setRondBlanc(){
-        rondBlanc = new ImageView(new Image("file:Assets/rond_blanc.png"));
-        rondBlanc.setFitWidth(this.WIDTH-20);
-        rondBlanc.setPreserveRatio(true);
-    }
-    public void setRondNoir(){
-        rondNoir = new ImageView(new Image("file:Assets/rond_noir.png"));
-        rondNoir.setFitWidth(this.WIDTH-20);
-        rondNoir.setPreserveRatio(true);
-    }
-
-
 }
