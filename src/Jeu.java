@@ -32,6 +32,13 @@ public class Jeu {
     private ColonneDeJeu col1 = null;
     private ColonneDeJeu col2 = null;
 
+    public int getCoutDuMouv() {
+        return coutDuMouv;
+    }
+
+    int coutDuMouv;
+
+
     private final BgPane plateau = new BgPane();
 
     /**
@@ -76,7 +83,7 @@ public class Jeu {
                             || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() < col2.getCol())
                             || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() > col2.getCol()))){
 
-                        int coutDuMouv;
+
                         if (col1.getRow() == col2.getRow()) {
                             coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
                         }else{
@@ -84,7 +91,6 @@ public class Jeu {
                         }
 
                         if (resteDes.contains(coutDuMouv)) {
-                            resteDes.remove(resteDes.lastIndexOf(coutDuMouv));
                             col1.updateRectangle(currentJoueur, col2);
                             if (resteDes.isEmpty()) {
                                 desLances = false;
@@ -109,7 +115,6 @@ public class Jeu {
                         }
 
                         if (resteDes.contains(coutDuMouv)) {
-                            resteDes.remove(resteDes.lastIndexOf(coutDuMouv));
                             col1.updateRectangle(currentJoueur, col2);
                             if (resteDes.isEmpty()) {
                                 desLances = false;

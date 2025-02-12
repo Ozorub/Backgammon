@@ -126,10 +126,11 @@ public class ColonneDeJeu extends StackPane {
                     col2.nbPionsBlanc++;
                     col2.nbPionsNoir--;
                     Main.JEU.getPlateau().getPrisonNoir().setColNoir(Main.JEU.getPlateau().getPrisonNoir().getNbPionsNoir() + 1);
-
+                    Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                 } else {
                     this.nbPionsBlanc--;
                     col2.nbPionsBlanc++;
+                    Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                 }
             }
         } else {
@@ -143,9 +144,11 @@ public class ColonneDeJeu extends StackPane {
                     col2.nbPionsNoir++;
                     col2.nbPionsBlanc--;
                     Main.JEU.getPlateau().getPrisonBlanc().setColBlanc(Main.JEU.getPlateau().getPrisonBlanc().getNbPionsBlanc() + 1);
+                    Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                 } else {
                     this.nbPionsNoir--;
                     col2.nbPionsNoir++;
+                    Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                 }
             }
         }
