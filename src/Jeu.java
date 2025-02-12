@@ -92,6 +92,7 @@ public class Jeu {
 
                         if (resteDes.contains(coutDuMouv)) {
                             col1.updateRectangle(currentJoueur, col2);
+                            coutDuMouv = 0;
                             if (resteDes.isEmpty()) {
                                 desLances = false;
                                 currentJoueur = (currentJoueur == Joueur.BLANC)?j2:j1;
@@ -107,7 +108,6 @@ public class Jeu {
                             || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() > col2.getCol())
                             || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() < col2.getCol()))){
 
-                        int coutDuMouv;
                         if (col1.getRow() == col2.getRow()) {
                             coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
                         }else{
@@ -116,6 +116,7 @@ public class Jeu {
 
                         if (resteDes.contains(coutDuMouv)) {
                             col1.updateRectangle(currentJoueur, col2);
+                            coutDuMouv = 0;
                             if (resteDes.isEmpty()) {
                                 desLances = false;
                                 currentJoueur = (currentJoueur == Joueur.BLANC)?j2:j1;
