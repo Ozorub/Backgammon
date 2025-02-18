@@ -15,7 +15,7 @@ public class Main extends Application {
         JEU = new Jeu();
         Scene scene = new Scene(JEU.getPlateau());
 
-        stage.setResizable(true);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();

@@ -14,8 +14,12 @@ import java.util.ArrayList;
 public class BgPane extends BorderPane {
     public static final int NBCOL = 12;
     public static final int NBROW = 2;
-    GridPane plateau;
+    GridPane grille;
     ColonneDeJeu colonneDeJeu;
+    VBox dice = new VBox();
+    VBox prisons = new VBox();
+    private ColonneDeJeu prisonBlanc;
+    private ColonneDeJeu prisonNoir;
 
     public ColonneDeJeu getPrisonNoir() {
         return prisonNoir;
@@ -25,12 +29,10 @@ public class BgPane extends BorderPane {
         return prisonBlanc;
     }
 
-    private ColonneDeJeu prisonBlanc;
-    private ColonneDeJeu prisonNoir;
 
 
     public BgPane() {
-        plateau = new GridPane();
+        grille = new GridPane();
 
         for(int col = 0 ; col< NBCOL ; col ++){
             for(int row = 0; row< NBROW; row ++){
@@ -45,18 +47,17 @@ public class BgPane extends BorderPane {
                 }
                 GridPane.setRowIndex(colonneDeJeu, row);
                 GridPane.setColumnIndex(colonneDeJeu, col);
-                plateau.getChildren().addAll(colonneDeJeu);
+                grille.getChildren().addAll(colonneDeJeu);
 
 
             }
         }
-        setBordPlateau(plateau);
-        setUpGame(plateau);
+        setBordPlateau(grille);
+        setUpEndGame(grille);
+        //setUpGame(grille);
 
-        this.setCenter(plateau);
+        this.setCenter(grille);
 
-
-        VBox prisons = new VBox();
         prisonBlanc = new ColonneDeJeu();
         prisonBlanc.fond.setFill(Color.WHITE);
         prisonBlanc.triangle.setFill(Color.WHITE);
@@ -77,7 +78,7 @@ public class BgPane extends BorderPane {
         this.setRight(prisons);
 
 
-        VBox dice = new VBox();
+
         Label de1 = new Label("Dé 1: pas lancé");
         Label de2 = new Label("Dé 2: pas lancé");
         Button lancer = new Button("Lancer les dés");
@@ -101,7 +102,7 @@ public class BgPane extends BorderPane {
             }
         });
 
-        dice.getChildren().addAll(de1,de2,lancer);
+        dice.getChildren().addAll(de1,de2,lancer, new Label("Les blancs commencent"));
 
         this.setLeft(dice);
 
@@ -154,6 +155,21 @@ public class BgPane extends BorderPane {
         getColonneDeJeu(gp,1,4).setColBlanc(3);
         getColonneDeJeu(gp,1,6).setColBlanc(5);
         getColonneDeJeu(gp,1,11).setColNoir(2);
+    }
+
+    public void setUpEndGame(GridPane gp){
+        getColonneDeJeu(gp,1,6).setColBlanc(4);
+        getColonneDeJeu(gp,1,7).setColBlanc(4);
+        getColonneDeJeu(gp,1,8).setColBlanc(4);
+        getColonneDeJeu(gp,1,9).setColBlanc(4);
+        getColonneDeJeu(gp,1,10).setColBlanc(4);
+        getColonneDeJeu(gp,1,11).setColBlanc(4);
+        getColonneDeJeu(gp,0,6).setColNoir(4);
+        getColonneDeJeu(gp,0,7).setColNoir(4);
+        getColonneDeJeu(gp,0,8).setColNoir(4);
+        getColonneDeJeu(gp,0,9).setColNoir(4);
+        getColonneDeJeu(gp,0,10).setColNoir(4);
+        getColonneDeJeu(gp,0,11).setColNoir(4);
     }
 
 }

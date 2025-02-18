@@ -12,9 +12,11 @@ public class PaireDeDes {
      */
     private class De{
         private int valeur;
+
         private De(){
             valeur = (int)(Math.random()*6)+1;
         }
+
         private int lancerLeDe(){
             valeur = (int)(Math.random()*6)+1;
             return valeur;
