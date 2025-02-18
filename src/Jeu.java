@@ -127,7 +127,7 @@ public class Jeu {
                         }
                     }else{
                         //Endgame
-                        coutDuMouv = (col1.getCol()-BgPane.NBCOL/2)+1;
+                        coutDuMouv = 6- (col1.getCol()-BgPane.NBCOL/2);
                         if (resteDes.contains(coutDuMouv)) {
 
                             col1.updateColonne(currentJoueur, col1, 0);
@@ -172,7 +172,7 @@ public class Jeu {
                         }
                     }else{
                         //Endgame
-                        coutDuMouv = (col1.getCol()-BgPane.NBCOL/2)+1;
+                        coutDuMouv = 6-(col1.getCol()-BgPane.NBCOL/2);
                         if (resteDes.contains(coutDuMouv)) {
                             col1.updateColonne(currentJoueur, col1, 0);
                             coutDuMouv = 0;
