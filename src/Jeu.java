@@ -12,7 +12,7 @@ import java.util.List;
 public class Jeu {
     private final Joueur j1 = Joueur.BLANC;
     private final Joueur j2 = Joueur.NOIR;
-    private PaireDeDes des = new PaireDeDes();
+    private final PaireDeDes des = new PaireDeDes();
     private boolean desLances = false;
     private ArrayList<Integer> resteDes = new ArrayList<>();
     private Joueur currentJoueur = j1;
@@ -45,8 +45,6 @@ public class Jeu {
             int[] lancer = des.lancerLesDes(); //lancer des dés
 
 
-
-
             while (!finDuTour) {
                 //finDuTour = !canPlay(currentJoueur, lancer);
             }
@@ -66,7 +64,7 @@ public class Jeu {
             ColonneDeJeu col2 = Main.JEU.getCol2();
 
             //Aucun pions ailleurs que dans sa zone(pas en prison non plus)
-            if(!isEndGameWhite) {
+            if (!isEndGameWhite) {
                 for (int col = 0; col < BgPane.NBCOL; col++) {
                     if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 1, 0).getNbPionsBlanc() == 0
@@ -80,7 +78,7 @@ public class Jeu {
                     }
                 }
             }
-            if(!isEndGameBlack) {
+            if (!isEndGameBlack) {
                 for (int col = 1; col < BgPane.NBCOL; col++) {
                     if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 0, 0).getNbPionsNoir() == 0
@@ -98,93 +96,86 @@ public class Jeu {
 
             if (desLances) {
                 if (currentJoueur == Joueur.BLANC) {
-                    if(!isEndGameWhite) {
-
+                    if (!isEndGameWhite) {
                         if (col1.getRow() != 100 && col2.getRow() != 100 && (col1.getRow() < col2.getRow()
                                 || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() < col2.getCol())
                                 || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() > col2.getCol()))) { // inGame
 
 
-                            if (col1.getRow() == col2.getRow()) {
-                                coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
-                            } else {
-                                coutDuMouv = col1.getCol() + col2.getCol() + 1;
-                            }
+                            deplacerPion(currentJoueur);
 
-                            if (resteDes.contains(coutDuMouv)) {
-                                col1.updateColonne(currentJoueur, col2, 1);
-                                coutDuMouv = 0;
-                                if (resteDes.isEmpty()) {
-                                    plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
-                                    desLances = false;
-                                    currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
-                                }
-                            }
                         } else if (col1.getRow() == 100) {
                             //TODO : gestion des pions sur la prison
-                        }else {
+
+
+                        } else {
                             System.out.println("Mauvais sens de jeu");
                         }
-                    }else{
+                    } else {
                         //Endgame
-                        coutDuMouv = 6- (col1.getCol()-BgPane.NBCOL/2);
-                        if (resteDes.contains(coutDuMouv)) {
-
-                            col1.updateColonne(currentJoueur, col1, 0);
-                            coutDuMouv = 0;
-                            if (resteDes.isEmpty()) {
-                                plateau.dice.getChildren().set(3, new Label("Tour des noirs"));
-                                desLances = false;
-                                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+                        int nbPionsBlancGauche = 0;
+                        if (col1.getNbPionsBlanc() == 0) {
+                            for (int col = col1.getCol(); col > col1.getCol() - 6; col--) {
+                                nbPionsBlancGauche += plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc();
                             }
-                        }else{
-                            System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
+                            if (nbPionsBlancGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
+                                boolean fisrtTime = true;
+                                for (int col = col1.getCol(); col < col1.getCol() + Math.min(5, BgPane.NBCOL - col1.getCol()); col++) {
+                                    if (plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() > 0 && fisrtTime) {
+                                        supprPion(currentJoueur, plateau.getColonneDeJeu(plateau.grille, 1, col));
+                                        fisrtTime = false;
+                                    }
+                                }
+
+                            } else {
+
+                                // todo
+                                System.out.println("y a des pions à gauche");
+
+                                deplacerPion(currentJoueur);
+
+                            }
                         }
+                        supprPion(currentJoueur);
 
                     }
                 } else if (currentJoueur == Joueur.NOIR) {
-                    if(!isEndGameBlack) {
+                    if (!isEndGameBlack) {
 
                         if (col1.getRow() != 100 && col2.getRow() != 100 && (col1.getRow() > col2.getRow()
                                 || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() > col2.getCol())
                                 || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() < col2.getCol()))) { // inGame
 
-                            if (col1.getRow() == col2.getRow()) {
-                                coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
-                            } else {
-                                coutDuMouv = col1.getCol() + col2.getCol() + 1;
-                            }
+                            deplacerPion(currentJoueur);
 
-                            if (resteDes.contains(coutDuMouv)) {
-                                col1.updateColonne(currentJoueur, col2, 1);
-                                coutDuMouv = 0;
-                                if (resteDes.isEmpty()) {
-                                    plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
-                                    desLances = false;
-                                    currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
-
-                                }
-                            }
                         } else if (col1.getRow() == 100) {
                             //TODO : gestion des pions sur la prison
                         } else {
                             System.out.println("Mauvais sens de jeu");
                         }
-                    }else{
+                    } else {
                         //Endgame
-                        coutDuMouv = 6-(col1.getCol()-BgPane.NBCOL/2);
-                        if (resteDes.contains(coutDuMouv)) {
-                            col1.updateColonne(currentJoueur, col1, 0);
-                            coutDuMouv = 0;
-                            if (resteDes.isEmpty()) {
-                                plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
-                                desLances = false;
-                                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+                        int nbPionsNoirGauche = 0;
+                        if (col1.getNbPionsNoir() == 0) {
+                            for (int col = col1.getCol(); col > col1.getCol() - 6; col--) {
+                                nbPionsNoirGauche += plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir();
                             }
-                        }else{
-                            System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
-                        }
+                            if (nbPionsNoirGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
+                                boolean fisrtTime = true;
+                                for (int col = col1.getCol(); col < col1.getCol() + Math.min(5, BgPane.NBCOL - col1.getCol()); col++) {
+                                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir() > 0 && fisrtTime) {
+                                        supprPion(currentJoueur, plateau.getColonneDeJeu(plateau.grille, 0, col));
+                                        fisrtTime = false;
+                                    }
+                                }
+                            } else {
+                                // todo
 
+                                deplacerPion(currentJoueur);
+
+                            }
+                        }
+                        supprPion(currentJoueur);
                     }
                 }
 
@@ -197,6 +188,62 @@ public class Jeu {
         }
     }
 
+    public void deplacerPion(Joueur j) {
+        if (col1.getRow() == col2.getRow()) {
+            coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
+        } else {
+            coutDuMouv = col1.getCol() + col2.getCol() + 1;
+        }
+
+        if (resteDes.contains(coutDuMouv)) {
+            col1.updateColonne(currentJoueur, col2, 1);
+            coutDuMouv = 0;
+            if (resteDes.isEmpty()) {
+                if (j == Joueur.BLANC)
+                    plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
+                else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
+                desLances = false;
+                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+            }
+        }
+    }
+
+
+    public void supprPion(Joueur j) {
+        coutDuMouv = 6 - (col1.getCol() - BgPane.NBCOL / 2);
+        if (resteDes.contains(coutDuMouv)) {
+
+            col1.updateColonne(currentJoueur, col1, 0);
+            coutDuMouv = 0;
+            if (resteDes.isEmpty()) {
+                if (j == Joueur.BLANC)
+                    plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
+                else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
+                desLances = false;
+                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+            }
+        } else {
+            System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
+        }
+    }
+
+    public void supprPion(Joueur j, ColonneDeJeu colonneDeJeu) {
+        coutDuMouv = 6 - (col1.getCol() - BgPane.NBCOL / 2);
+        if (resteDes.contains(coutDuMouv)) {
+
+            colonneDeJeu.updateColonne(currentJoueur, col1, 0);
+            coutDuMouv = 0;
+            if (resteDes.isEmpty()) {
+                if (j == Joueur.BLANC)
+                    plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
+                else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
+                desLances = false;
+                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+            }
+        } else {
+            System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
+        }
+    }
 
     void lancerDes() {
         des.lancerLesDes();

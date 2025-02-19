@@ -95,7 +95,6 @@ public class ColonneDeJeu extends StackPane {
                 }
                 if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
                     Main.JEU.bougerPion();
-
                     Main.JEU.setCol1(null);
                     Main.JEU.setCol2(null);
 

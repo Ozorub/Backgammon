@@ -28,7 +28,7 @@ public class Main extends Application {
         launch(args);
 
         Thread t = new Thread(() -> JEU.jouer());
-        JEU.jouer();
+        //JEU.jouer(); a effacer si besoin
         //t.start();
 
     }

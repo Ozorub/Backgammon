@@ -158,18 +158,18 @@ public class BgPane extends BorderPane {
     }
 
     public void setUpEndGame(GridPane gp){
-        getColonneDeJeu(gp,1,6).setColBlanc(4);
-        getColonneDeJeu(gp,1,7).setColBlanc(4);
-        getColonneDeJeu(gp,1,8).setColBlanc(4);
-        getColonneDeJeu(gp,1,9).setColBlanc(4);
-        getColonneDeJeu(gp,1,10).setColBlanc(4);
-        getColonneDeJeu(gp,1,11).setColBlanc(4);
-        getColonneDeJeu(gp,0,6).setColNoir(4);
-        getColonneDeJeu(gp,0,7).setColNoir(4);
-        getColonneDeJeu(gp,0,8).setColNoir(4);
-        getColonneDeJeu(gp,0,9).setColNoir(4);
-        getColonneDeJeu(gp,0,10).setColNoir(4);
-        getColonneDeJeu(gp,0,11).setColNoir(4);
+        getColonneDeJeu(gp,1,6).setColBlanc(2);
+        getColonneDeJeu(gp,1,7).setColBlanc(2);
+        getColonneDeJeu(gp,1,8).setColBlanc(2);
+//        getColonneDeJeu(gp,1,9).setColBlanc(2);
+//        getColonneDeJeu(gp,1,10).setColBlanc(2);
+//        getColonneDeJeu(gp,1,11).setColBlanc(2);
+        getColonneDeJeu(gp,0,6).setColNoir(2);
+        getColonneDeJeu(gp,0,7).setColNoir(2);
+        getColonneDeJeu(gp,0,8).setColNoir(2);
+        getColonneDeJeu(gp,0,9).setColNoir(2);
+        getColonneDeJeu(gp,0,10).setColNoir(2);
+        getColonneDeJeu(gp,0,11).setColNoir(2);
     }
 
 }
