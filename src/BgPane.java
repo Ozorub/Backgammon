@@ -21,6 +21,7 @@ public class BgPane extends BorderPane {
     private ColonneDeJeu prisonBlanc;
     private ColonneDeJeu prisonNoir;
 
+
     public ColonneDeJeu getPrisonNoir() {
         return prisonNoir;
     }
@@ -102,6 +103,28 @@ public class BgPane extends BorderPane {
             }
         });
 
+        boolean firstTime = true;
+        for (int col = 6; col < 6+ Math.max(Main.JEU.valeurDes()[0],Main.JEU.valeurDes()[1]); col++) {
+            if ((Jeu.isEndGameWhite) && (getColonneDeJeu(grille, 1, col).getNbPionsBlanc() == 0)
+                    && firstTime) {
+
+                System.out.println("Je suis dans la condition qui rend la fin spécial Blanches");
+                Jeu.setIsEndGameWhite(false);
+                Jeu.setIsSpecialEndGameWhite(true);
+                firstTime = false;
+            }
+        }
+        for (int col = 6; col < 6+ Math.max(Main.JEU.valeurDes()[0],Main.JEU.valeurDes()[1]); col++) {
+            if ((Jeu.isEndGameBlack) && (getColonneDeJeu(grille, 0, col).getNbPionsNoir() == 0)
+                    && firstTime) {
+
+                System.out.println("Je suis dans la condition qui rend la fin spécial Noires");
+                Jeu.setIsEndGameBlack(false);
+                Jeu.setIsSpecialEndGameBlack(true);
+                firstTime = false;
+            }
+        }
+
         dice.getChildren().addAll(de1,de2,lancer, new Label("Les blancs commencent"));
 
         this.setLeft(dice);
@@ -172,10 +195,8 @@ public class BgPane extends BorderPane {
         getColonneDeJeu(gp,0,11).setColNoir(2);
     }
 
+
+
 }
-
-
-
-
 
 

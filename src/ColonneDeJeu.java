@@ -88,6 +88,7 @@ public class ColonneDeJeu extends StackPane {
         vBox.setOnMouseClicked(event -> {
             try {
 
+
                 if (Main.JEU.getCol1() == null) {
                     Main.JEU.setCol1(this);
                 } else if (Main.JEU.getCol2() == null) {
@@ -95,8 +96,23 @@ public class ColonneDeJeu extends StackPane {
                 }
                 if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
                     Main.JEU.bougerPion();
+                    if(Jeu.isSpecialEndGameWhite) {
+
+                        System.out.println("remise des variables Blanches");
+                        Jeu.setIsSpecialEndGameWhite(false);
+                        Jeu.setIsEndGameWhite(true);
+                    }
+                    if(Jeu.isSpecialEndGameBlack) {
+
+                        System.out.println("remise des variables Noires");
+                        Jeu.setIsSpecialEndGameBlack(false);
+                        Jeu.setIsEndGameBlack(true);
+
+
+                    }
                     Main.JEU.setCol1(null);
                     Main.JEU.setCol2(null);
+
 
                 }
 

@@ -22,6 +22,12 @@ public class Jeu {
     int coutDuMouv;
     static Boolean isEndGameWhite = false;
     static Boolean isEndGameBlack = false;
+    private int nbPionsBlancGauche = 0;
+    private int nbPionsNoirGauche = 0;
+    static boolean isSpecialEndGameWhite = false;
+    static boolean isSpecialEndGameBlack = false;
+
+
 
 
     /**
@@ -42,7 +48,7 @@ public class Jeu {
             boolean finDuTour = false;
             System.out.println("Tour de " + currentJoueur);
             currentJoueur = (currentJoueur == j1) ? j2 : j1; //changement de joueur
-            int[] lancer = des.lancerLesDes(); //lancer des dés
+            // int[] lancer = des.lancerLesDes(); //lancer des dés
 
 
             while (!finDuTour) {
@@ -53,6 +59,12 @@ public class Jeu {
 
         //TODO : sortir du jeu
     }
+
+
+    public Joueur getJ1() {
+        return j1;
+    }
+
 
 
     void bougerPion() {
@@ -113,28 +125,43 @@ public class Jeu {
                         }
                     } else {
                         //Endgame
-                        int nbPionsBlancGauche = 0;
                         if (col1.getNbPionsBlanc() == 0) {
                             for (int col = col1.getCol(); col > col1.getCol() - 6; col--) {
                                 nbPionsBlancGauche += plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc();
                             }
                             if (nbPionsBlancGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
-                                boolean fisrtTime = true;
+                                System.out.println("Je vais supprimer un pion");
+
+                                boolean firstTime2 = true;
                                 for (int col = col1.getCol(); col < col1.getCol() + Math.min(5, BgPane.NBCOL - col1.getCol()); col++) {
-                                    if (plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() > 0 && fisrtTime) {
+                                    if (plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() > 0 && firstTime2) {
                                         supprPion(currentJoueur, plateau.getColonneDeJeu(plateau.grille, 1, col));
-                                        fisrtTime = false;
+                                        firstTime2 = false;
                                     }
                                 }
 
-                            } else {
-
-                                // todo
-                                System.out.println("y a des pions à gauche");
-
-                                deplacerPion(currentJoueur);
-
                             }
+
+                            // todo
+
+//                            boolean firstTime = true;
+//                            for (int col = 6; col < 12; col++) {
+//                                if ((plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() == 0)
+//                                        && firstTime) {
+//                                    System.out.println("Je suis dans la condition qui rend la fin spécial");
+//                                    isEndGameBlack = false;
+//                                    isEndGameWhite = false;
+//                                    isSpecialEndGame = true;
+//
+//                                    firstTime = false;
+//                                }
+//                            }
+
+                            System.out.println("y a des pions à gauche");
+
+                            deplacerPion(currentJoueur);
+
+
                         }
                         supprPion(currentJoueur);
 
@@ -155,24 +182,19 @@ public class Jeu {
                         }
                     } else {
                         //Endgame
-                        int nbPionsNoirGauche = 0;
+
                         if (col1.getNbPionsNoir() == 0) {
                             for (int col = col1.getCol(); col > col1.getCol() - 6; col--) {
                                 nbPionsNoirGauche += plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir();
                             }
                             if (nbPionsNoirGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
-                                boolean fisrtTime = true;
+                                boolean firstTime2 = true;
                                 for (int col = col1.getCol(); col < col1.getCol() + Math.min(5, BgPane.NBCOL - col1.getCol()); col++) {
-                                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir() > 0 && fisrtTime) {
+                                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir() > 0 && firstTime2) {
                                         supprPion(currentJoueur, plateau.getColonneDeJeu(plateau.grille, 0, col));
-                                        fisrtTime = false;
+                                        firstTime2 = false;
                                     }
                                 }
-                            } else {
-                                // todo
-
-                                deplacerPion(currentJoueur);
-
                             }
                         }
                         supprPion(currentJoueur);
@@ -290,4 +312,41 @@ public class Jeu {
         return coutDuMouv;
     }
 
+    public int getNbPionsBlancGauche() {
+        return nbPionsBlancGauche;
+    }
+
+    public void setNbPionsBlancGauche(int nbPionsBlancGauche) {
+        this.nbPionsBlancGauche = nbPionsBlancGauche;
+    }
+
+    public int getNbPionsNoirGauche() {
+        return nbPionsNoirGauche;
+    }
+
+    public void setNbPionsNoirGauche(int nbPionsNoirGauche) {
+        this.nbPionsNoirGauche = nbPionsNoirGauche;
+    }
+
+
+    public static void setIsEndGameWhite(Boolean isEndGameWhite) {
+        Jeu.isEndGameWhite = isEndGameWhite;
+    }
+
+
+    public static void setIsEndGameBlack(Boolean isEndGameBlack) {
+        Jeu.isEndGameBlack = isEndGameBlack;
+
+
+    }
+
+
+    public static void setIsSpecialEndGameBlack(boolean isSpecialEndGameBlack) {
+        Jeu.isSpecialEndGameBlack = isSpecialEndGameBlack;
+    }
+
+
+    public static void setIsSpecialEndGameWhite(boolean isSpecialEndGameWhite) {
+        Jeu.isSpecialEndGameWhite = isSpecialEndGameWhite;
+    }
 }
