@@ -12,7 +12,7 @@ import java.util.List;
 public class Jeu {
     private final Joueur j1 = Joueur.BLANC;
     private final Joueur j2 = Joueur.NOIR;
-    private final PaireDeDes des = new PaireDeDes();
+    private static final PaireDeDes des = new PaireDeDes();
     private boolean desLances = false;
     private ArrayList<Integer> resteDes = new ArrayList<>();
     private Joueur currentJoueur = j1;
@@ -26,8 +26,6 @@ public class Jeu {
     private int nbPionsNoirGauche = 0;
     static boolean isSpecialEndGameWhite = false;
     static boolean isSpecialEndGameBlack = false;
-
-
 
 
     /**
@@ -64,7 +62,6 @@ public class Jeu {
     public Joueur getJ1() {
         return j1;
     }
-
 
 
     void bougerPion() {
@@ -109,18 +106,14 @@ public class Jeu {
             if (desLances) {
                 if (currentJoueur == Joueur.BLANC) {
                     if (!isEndGameWhite) {
-                        if (col1.getRow() != 100 && col2.getRow() != 100 && (col1.getRow() < col2.getRow()
+                        if (col1.getRow() == 100 || col2.getRow() == 100 || ((col1.getRow() < col2.getRow()
                                 || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() < col2.getCol())
-                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() > col2.getCol()))) { // inGame
+                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() > col2.getCol())))) { // inGame
 
 
                             deplacerPion(currentJoueur);
 
-                        } else if (col1.getRow() == 100) {
-                            //TODO : gestion des pions sur la prison
-
-
-                        } else {
+                        }else {
                             System.out.println("Mauvais sens de jeu");
                         }
                     } else {
@@ -141,26 +134,21 @@ public class Jeu {
                                 }
 
                             }
+                            int indexCol = 6;
+                            boolean colEmpty = true;
+                            while(colEmpty){
 
-                            // todo
+                                if (plateau.getColonneDeJeu(plateau.grille, 1, indexCol).getNbPionsBlanc() != 0 ){
+                                    colEmpty = false;
 
-//                            boolean firstTime = true;
-//                            for (int col = 6; col < 12; col++) {
-//                                if ((plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() == 0)
-//                                        && firstTime) {
-//                                    System.out.println("Je suis dans la condition qui rend la fin spécial");
-//                                    isEndGameBlack = false;
-//                                    isEndGameWhite = false;
-//                                    isSpecialEndGame = true;
-//
-//                                    firstTime = false;
-//                                }
-//                            }
+                                    setCol2(plateau.getColonneDeJeu(plateau.grille, 1,  indexCol+12-col1.getCol())); // Col1 et Col2 ne sont pas dépendantes, il est donc possible de reSet col2 en premier, lui donnant la valeur "de la première colonne non vide à droite + la valeur de la col1"
+                                    setCol1(plateau.getColonneDeJeu(plateau.grille, 1, indexCol));
 
-                            System.out.println("y a des pions à gauche");
+                                    deplacerPion(currentJoueur);
+                                }
 
-                            deplacerPion(currentJoueur);
-
+                                indexCol ++;
+                            }
 
                         }
                         supprPion(currentJoueur);
@@ -169,15 +157,15 @@ public class Jeu {
                 } else if (currentJoueur == Joueur.NOIR) {
                     if (!isEndGameBlack) {
 
-                        if (col1.getRow() != 100 && col2.getRow() != 100 && (col1.getRow() > col2.getRow()
+                        if (col1.getRow() == 100 || col2.getRow() == 100 || ((col1.getRow() > col2.getRow()
                                 || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() > col2.getCol())
-                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() < col2.getCol()))) { // inGame
+                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() < col2.getCol())))) { // inGame
 
                             deplacerPion(currentJoueur);
 
-                        } else if (col1.getRow() == 100) {
-                            //TODO : gestion des pions sur la prison
-                        } else {
+                        }
+
+                             else {
                             System.out.println("Mauvais sens de jeu");
                         }
                     } else {
@@ -195,6 +183,24 @@ public class Jeu {
                                         firstTime2 = false;
                                     }
                                 }
+
+
+
+                            }
+                            int indexCol = 6;
+                            boolean colEmpty = true;
+                            while(colEmpty){
+
+                                if (plateau.getColonneDeJeu(plateau.grille, 0, indexCol).getNbPionsNoir() != 0 ){
+                                    colEmpty = false;
+
+                                    setCol2(plateau.getColonneDeJeu(plateau.grille, 0,  indexCol+12-col1.getCol())); // Col1 et Col2 ne sont pas dépendantes, il est donc possible de reSet col2 en premier, lui donnant la valeur "de la première colonne non vide à droite + la valeur de la col1"
+                                    setCol1(plateau.getColonneDeJeu(plateau.grille, 0, indexCol));
+
+                                    deplacerPion(currentJoueur);
+                                }
+
+                                indexCol ++;
                             }
                         }
                         supprPion(currentJoueur);
@@ -210,8 +216,21 @@ public class Jeu {
         }
     }
 
+
+
     public void deplacerPion(Joueur j) {
-        if (col1.getRow() == col2.getRow()) {
+        System.out.println("Je rentre dans la méthode deplacer pion");
+        if(col1.getCol()==100){ // gestion de la prison
+            coutDuMouv = 12- col2.getCol();
+            System.out.println("Je suis en prison triste vie");
+            if(currentJoueur == Joueur.NOIR && col2.getNbPionsBlanc() <=1 && resteDes.contains(coutDuMouv) && col2.getRow()==1 ){
+                col1.updateColonne(currentJoueur,col2,1);
+            } else if (currentJoueur == Joueur.BLANC && col2.getNbPionsNoir() <=1 && resteDes.contains(coutDuMouv) && col2.getRow() == 0 ) {
+                col1.updateColonne(currentJoueur,col2,1);
+            }
+        }
+
+        else if (col1.getRow() == col2.getRow()) {
             coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
         } else {
             coutDuMouv = col1.getCol() + col2.getCol() + 1;
@@ -245,6 +264,7 @@ public class Jeu {
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
             }
         } else {
+
             System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
         }
     }
@@ -263,7 +283,7 @@ public class Jeu {
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
             }
         } else {
-            System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
+            //System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
         }
     }
 
@@ -271,7 +291,7 @@ public class Jeu {
         des.lancerLesDes();
     }
 
-    public int[] valeurDes() {
+    public static int[] valeurDes() {
         return des.valeursDesDes();
     }
 

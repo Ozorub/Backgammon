@@ -88,7 +88,6 @@ public class ColonneDeJeu extends StackPane {
         vBox.setOnMouseClicked(event -> {
             try {
 
-
                 if (Main.JEU.getCol1() == null) {
                     Main.JEU.setCol1(this);
                 } else if (Main.JEU.getCol2() == null) {
@@ -96,23 +95,9 @@ public class ColonneDeJeu extends StackPane {
                 }
                 if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
                     Main.JEU.bougerPion();
-                    if(Jeu.isSpecialEndGameWhite) {
 
-                        System.out.println("remise des variables Blanches");
-                        Jeu.setIsSpecialEndGameWhite(false);
-                        Jeu.setIsEndGameWhite(true);
-                    }
-                    if(Jeu.isSpecialEndGameBlack) {
-
-                        System.out.println("remise des variables Noires");
-                        Jeu.setIsSpecialEndGameBlack(false);
-                        Jeu.setIsEndGameBlack(true);
-
-
-                    }
                     Main.JEU.setCol1(null);
                     Main.JEU.setCol2(null);
-
 
                 }
 
@@ -156,7 +141,7 @@ public class ColonneDeJeu extends StackPane {
                         System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                         System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
-                        Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+                         Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv())); // a faire, un if avec un getcoutdumouv !=100
                     }
                 }
             } else {
@@ -272,19 +257,13 @@ public class ColonneDeJeu extends StackPane {
      * Les deux méthodes qui suivent permettent de remplir une colonne avec un nombre {@param nb}souhaité de pions, blancs ou noirs
      */
     public void setColBlanc(int nb) {
-        /**for(int i =0;i <nb;i++){
-         setRondBlanc();
-         this.vBox.getChildren().add(rondBlanc);
-         }*/
+
         nbPionsBlanc = nb;
         this.updateGraphics();
     }
 
     public void setColNoir(int nb) {
-        /**for(int i =0;i <nb;i++){
-         setRondNoir();
-         this.vBox.getChildren().add(rondNoir);
-         }*/
+
         nbPionsNoir = nb;
         this.updateGraphics();
     }
