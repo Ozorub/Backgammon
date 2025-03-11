@@ -74,29 +74,36 @@ public class Jeu {
 
             //Aucun pions ailleurs que dans sa zone(pas en prison non plus)
             if (!isEndGameWhite) {
+                boolean intermediare = false;
                 for (int col = 0; col < BgPane.NBCOL; col++) {
-                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 1, 0).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 1, 1).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 1, 2).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 1, 3).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 1, 4).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 1, 5).getNbPionsBlanc() == 0
-                            && plateau.getPrisonBlanc().getNbPionsBlanc() == 0) {
-                        isEndGameWhite = true;
+                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0) {
+                        intermediare= true;
                     }
+                }if(plateau.getColonneDeJeu(plateau.grille, 1, 0).getNbPionsBlanc() == 0
+                        && plateau.getColonneDeJeu(plateau.grille, 1, 1).getNbPionsBlanc() == 0
+                        && plateau.getColonneDeJeu(plateau.grille, 1, 2).getNbPionsBlanc() == 0
+                        && plateau.getColonneDeJeu(plateau.grille, 1, 3).getNbPionsBlanc() == 0
+                        && plateau.getColonneDeJeu(plateau.grille, 1, 4).getNbPionsBlanc() == 0
+                        && plateau.getColonneDeJeu(plateau.grille, 1, 5).getNbPionsBlanc() == 0
+                        && plateau.getPrisonBlanc().getNbPionsBlanc() == 0
+                        && intermediare){
+                    isEndGameWhite = true;
                 }
             }
             if (!isEndGameBlack) {
+                boolean intermediaire = false ;
                 for (int col = 1; col < BgPane.NBCOL; col++) {
-                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 0, 0).getNbPionsNoir() == 0
+                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0) {
+                        intermediaire = true ;
+                    }
+                    if(plateau.getColonneDeJeu(plateau.grille, 0, 0).getNbPionsNoir() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 0, 1).getNbPionsNoir() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 0, 2).getNbPionsNoir() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 0, 3).getNbPionsNoir() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 0, 4).getNbPionsNoir() == 0
                             && plateau.getColonneDeJeu(plateau.grille, 0, 5).getNbPionsNoir() == 0
-                            && plateau.getPrisonNoir().getNbPionsNoir() == 0) {
+                            && plateau.getPrisonNoir().getNbPionsNoir() == 0
+                            && intermediaire){
                         isEndGameBlack = true;
                     }
                 }
