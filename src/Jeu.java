@@ -112,11 +112,16 @@ public class Jeu {
 
             if (desLances) {
                 if (currentJoueur == Joueur.BLANC) {
-                    if (!isEndGameWhite) {
-                        if (col1.getRow() == 100 || col2.getRow() == 100 || ((col1.getRow() < col2.getRow()
-                                || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() < col2.getCol())
-                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() > col2.getCol())))) { // inGame
+                    if(plateau.getPrisonBlanc().getNbPionsBlanc() !=0){
+                        System.out.println("Prisosososososososososoos");
+                        deplacerPionPrison(currentJoueur);
+                    }
 
+                    else if (!isEndGameWhite) {
+
+                        if ((col1.getRow() < col2.getRow()
+                                || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() < col2.getCol())
+                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() > col2.getCol()))) { // inGame
 
                             deplacerPion(currentJoueur);
 
@@ -162,16 +167,16 @@ public class Jeu {
 
                     }
                 } else if (currentJoueur == Joueur.NOIR) {
-                    if (!isEndGameBlack) {
-
-                        if (col1.getRow() == 100 || col2.getRow() == 100 || ((col1.getRow() > col2.getRow()
+                    if(plateau.getPrisonNoir().getNbPionsNoir() != 0 ){
+                        deplacerPionPrison(currentJoueur);
+                    }
+                    else if (!isEndGameBlack) {
+                        if ((col1.getRow() > col2.getRow()
                                 || (col1.getRow() == 1 && col2.getRow() == 1 && col1.getCol() > col2.getCol())
-                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() < col2.getCol())))) { // inGame
+                                || (col1.getRow() == 0 && col2.getRow() == 0 && col1.getCol() < col2.getCol()))) { // inGame
 
                             deplacerPion(currentJoueur);
-
                         }
-
                              else {
                             System.out.println("Mauvais sens de jeu");
                         }
@@ -227,17 +232,7 @@ public class Jeu {
 
     public void deplacerPion(Joueur j) {
         System.out.println("Je rentre dans la méthode deplacer pion");
-        if(col1.getCol()==100){ // gestion de la prison
-            coutDuMouv = 12- col2.getCol();
-            System.out.println("Je suis en prison triste vie");
-            if(currentJoueur == Joueur.NOIR && col2.getNbPionsBlanc() <=1 && resteDes.contains(coutDuMouv) && col2.getRow()==1 ){
-                col1.updateColonne(currentJoueur,col2,1);
-            } else if (currentJoueur == Joueur.BLANC && col2.getNbPionsNoir() <=1 && resteDes.contains(coutDuMouv) && col2.getRow() == 0 ) {
-                col1.updateColonne(currentJoueur,col2,1);
-            }
-        }
-
-        else if (col1.getRow() == col2.getRow()) {
+        if (col1.getRow() == col2.getRow()) {
             coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
         } else {
             coutDuMouv = col1.getCol() + col2.getCol() + 1;
@@ -256,11 +251,33 @@ public class Jeu {
         }
     }
 
+    public void deplacerPionPrison(Joueur j){
+        if(col1.getCol()==100){ // gestion de la prison
+            coutDuMouv = 12- col2.getCol();
+            System.out.println("Je suis en prison triste vie");
+            if(currentJoueur == Joueur.NOIR && col2.getNbPionsBlanc() <=1 && resteDes.contains(coutDuMouv) && col2.getRow()==1 ){
+                col1.updateColonne(currentJoueur,col2,1);
+            } else if (currentJoueur == Joueur.BLANC && col2.getNbPionsNoir() <=1 && resteDes.contains(coutDuMouv) && col2.getRow() == 0 ) {
+                col1.updateColonne(currentJoueur,col2,1);
+            }
+        }
+        if (resteDes.contains(coutDuMouv)) {
+            col1.updateColonne(currentJoueur, col2, 1);
+            coutDuMouv = 0;
+            if (resteDes.isEmpty()) {
+                if (j == Joueur.BLANC)
+                    plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
+                else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
+                desLances = false;
+                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+            }
+        }
+    }
 
     public void supprPion(Joueur j) {
         coutDuMouv = 6 - (col1.getCol() - BgPane.NBCOL / 2);
-        if (resteDes.contains(coutDuMouv)) {
 
+        if (resteDes.contains(coutDuMouv)) {
             col1.updateColonne(currentJoueur, col1, 0);
             coutDuMouv = 0;
             if (resteDes.isEmpty()) {
@@ -293,6 +310,22 @@ public class Jeu {
             //System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
         }
     }
+
+    //A modifier si l'on souhaite un peu factoriser le code
+
+//    public void updateMouvPion(Joueur j, int coutDuMouv, int action, ColonneDeJeu colonneDeJeu) {
+//        if (resteDes.contains(coutDuMouv)) {
+//            colonneDeJeu.updateColonne(currentJoueur, col1, action);
+//            coutDuMouv = 0;
+//            if (resteDes.isEmpty()) {
+//                if (j == Joueur.BLANC)
+//                    plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
+//                else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
+//                desLances = false;
+//                currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+//            }
+//        }
+//    }
 
     void lancerDes() {
         des.lancerLesDes();
