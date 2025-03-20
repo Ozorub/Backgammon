@@ -174,8 +174,15 @@ public class BgPane extends BorderPane {
 //        getColonneDeJeu(gp,0,11).setColNoir(2);
     }
 
-
-
+    public ArrayList<ColonneDeJeu> getAllColonnesDeJeu(){
+        ArrayList<ColonneDeJeu> colonnes = new ArrayList<>();
+        for(int col = 0 ; col< NBCOL ; col ++) {
+            for (int row = 0; row < NBROW; row++) {
+                colonnes.add(getColonneDeJeu(grille,row,col));
+            }
+        }
+        return colonnes;
+    }
 }
 
 
