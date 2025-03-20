@@ -3,7 +3,7 @@ import java.util.List;
 
 public class CoutsPossibles {
 
-    private ArrayList<ColonneDeJeu> allCols;
+    private final ArrayList<ColonneDeJeu> allCols;
 
     public CoutsPossibles() {
         allCols = Main.JEU.getPlateau().getAllColonnesDeJeu();
