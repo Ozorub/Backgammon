@@ -55,6 +55,12 @@ public class CoutsPossibles {
      */
     private List<int[]> coutsPossibles(ColonneDeJeu col, Joueur joueur){
 
+        /*
+        TODO :
+        - gérer les cas particuliers (prison, endgame)
+        - gérer que le déplacement soit valide (que, sans prendre en compte les pions adverses, la colonne d'arrivée soit atteignable par la colonne de départ). Notamment quand il y a un saut de ligne
+         */
+
         ArrayList<int[]> coutsPossibles = new ArrayList<>();
 
         if (col.getCol() == 100){ //prison TODO
