@@ -34,29 +34,29 @@ public class Jeu {
     public Jeu() {
     }
 
-    /**
-     * Méthode principale pour lancer le jeu
-     */
-    public void jouer() {
-        boolean finDuJeu = false;
-        currentJoueur = j2;
-
-        while (!finDuJeu) {
-
-            boolean finDuTour = false;
-            System.out.println("Tour de " + currentJoueur);
-            currentJoueur = (currentJoueur == j1) ? j2 : j1; //changement de joueur
-            // int[] lancer = des.lancerLesDes(); //lancer des dés
-
-
-            while (!finDuTour) {
-                //finDuTour = !canPlay(currentJoueur, lancer);
-            }
-            //not really useful need to check usefulness
-        }
-
-        //TODO : sortir du jeu
-    }
+//    /**
+//     * Méthode principale pour lancer le jeu
+//     */
+//    public void jouer() {
+//        boolean finDuJeu = false;
+//        currentJoueur = j2;
+//
+//        while (!finDuJeu) {
+//
+//            boolean finDuTour = false;
+//            System.out.println("Tour de " + currentJoueur);
+//            currentJoueur = (currentJoueur == j1) ? j2 : j1; //changement de joueur
+//            // int[] lancer = des.lancerLesDes(); //lancer des dés
+//
+//
+//            while (!finDuTour) {
+//                //finDuTour = !canPlay(currentJoueur, lancer);
+//            }
+//            //not really useful need to check usefulness
+//        }
+//
+//        //TODO : sortir du jeu
+//    }
 
 
     public Joueur getJ1() {
@@ -408,5 +408,9 @@ public class Jeu {
 
     public static void setIsSpecialEndGameWhite(boolean isSpecialEndGameWhite) {
         Jeu.isSpecialEndGameWhite = isSpecialEndGameWhite;
+    }
+
+    public Joueur getCurrentJoueur() {
+        return currentJoueur;
     }
 }

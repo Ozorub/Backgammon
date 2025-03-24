@@ -267,4 +267,12 @@ public class ColonneDeJeu extends StackPane {
         nbPionsNoir = nb;
         this.updateGraphics();
     }
+
+    @Override
+    public String toString() {
+        return "ColonneDeJeu{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }

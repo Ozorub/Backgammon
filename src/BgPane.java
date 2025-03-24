@@ -100,6 +100,8 @@ public class BgPane extends BorderPane {
 
                 Main.JEU.setDesLances(true);
                 Main.JEU.setResteDes(nouvelleListe);
+
+                new CoutsPossibles().calculCoutsPossibles((Main.JEU.getCurrentJoueur()));
             }
         });
 
