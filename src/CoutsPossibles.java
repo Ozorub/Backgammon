@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CoutsPossibles {
 
     private final ArrayList<ColonneDeJeu> allCols;
+    private static final ColonneDeJeu END_COL = new ColonneDeJeu(200,200);
 
     public CoutsPossibles() {
         allCols = Main.JEU.getPlateau().getAllColonnesDeJeu();
@@ -33,23 +35,23 @@ public class CoutsPossibles {
         //cas des endgames
         else if (Jeu.isEndGameBlack && joueur == Joueur.NOIR){
             desAJouer.forEach(de -> {
-                ColonneDeJeu colonne = allCols.get(12 - de);
+                ColonneDeJeu colonne = allCols.get(24 - 2*de);
                 if (colonne.getNbPionsNoir() > 0){
-                    coutsPossibles.add(new ColonneDeJeu[]{colonne, null});
+                    coutsPossibles.add(new ColonneDeJeu[]{colonne, END_COL});
                 }
                 else{
-                    ColonneDeJeu melenchon = null; // le plus a gauche possible
+                    ColonneDeJeu melenchon = allCols.get(22); // le plus a gauche possible
                     for (int i = 12; i < 24; i += 2){
                         if (allCols.get(i).getNbPionsNoir() > 0){
                             melenchon = allCols.get(i);
                             break;
                         }
                     }
-                    if (melenchon != null && melenchon.getCol() < de){
-                        coutsPossibles.addAll(coutsPossibles(melenchon, joueur,desAJouer));
+                    if (melenchon.getCol() < 12 - de){
+                        coutsPossibles.addAll(coutsPossibles(melenchon, joueur, Collections.singletonList(de)));
                     }
-                    else if (melenchon != null && melenchon.getCol() > de){
-                        coutsPossibles.add(new ColonneDeJeu[]{melenchon, null});
+                    else if (melenchon.getCol() > 12 - de){
+                        coutsPossibles.add(new ColonneDeJeu[]{melenchon, END_COL});
                     }
                 }
             });
@@ -57,26 +59,27 @@ public class CoutsPossibles {
 
         else if (Jeu.isEndGameWhite && joueur == Joueur.BLANC){
             desAJouer.forEach(de -> {
-                ColonneDeJeu colonne = allCols.get(12 - de);
+                ColonneDeJeu colonne = allCols.get(25 - 2*de);
                 if (colonne.getNbPionsBlanc() > 0){
-                    coutsPossibles.add(new ColonneDeJeu[]{colonne, null});
+                    coutsPossibles.add(new ColonneDeJeu[]{colonne, END_COL});
                 }
                 else{
-                    ColonneDeJeu melenchon = null; // le plus a gauche possible
+                    ColonneDeJeu melenchon = allCols.get(23); // le plus a gauche possible
                     for (int i = 13; i < 24; i += 2){
                         if (allCols.get(i).getNbPionsBlanc() > 0){
                             melenchon = allCols.get(i);
                             break;
                         }
                     }
-                    if (melenchon != null && melenchon.getCol() < de){
-                        coutsPossibles.addAll(coutsPossibles(melenchon, joueur,desAJouer));
+                    if (melenchon.getCol() < 12 - de){
+                        coutsPossibles.addAll(coutsPossibles(melenchon, joueur, Collections.singletonList(de)));
                     }
-                    else if (melenchon != null && melenchon.getCol() > de){
-                        coutsPossibles.add(new ColonneDeJeu[]{melenchon, null});
+                    else if (melenchon.getCol() > 12 - de){
+                        coutsPossibles.add(new ColonneDeJeu[]{melenchon, END_COL});
                     }
                 }
-            });        }
+            });
+        }
 
         //autrement
         else{
@@ -87,12 +90,6 @@ public class CoutsPossibles {
             });
         }
 
-        coutsPossibles.forEach(coutsPossible ->
-            System.out.println("Cout possible : " + coutsPossible[0].toString() + " -> " + coutsPossible[1].toString())
-        );
-        if (coutsPossibles.isEmpty()){
-            System.out.println("Aucun cout possible");
-        }
         return coutsPossibles;
     }
 

@@ -54,6 +54,11 @@ public class ColonneDeJeu extends StackPane {
         return nbPionsBlanc;
     }
 
+    public ColonneDeJeu(int x, int y){
+        //this();
+        this.setCol(x);
+        this.setRow(y);
+    }
 
     protected ColonneDeJeu() {
         //super();
@@ -88,17 +93,20 @@ public class ColonneDeJeu extends StackPane {
         vBox.setOnMouseClicked(event -> {
             try {
 
-                if (Main.JEU.getCol1() == null) {
-                    Main.JEU.setCol1(this);
-                } else if (Main.JEU.getCol2() == null) {
-                    Main.JEU.setCol2(this);
-                }
-                if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
-                    Main.JEU.bougerPion();
+                if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc.getClass() == Human.class
+                        ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir.getClass() == Human.class) {
+                    if (Main.JEU.getCol1() == null) {
+                        Main.JEU.setCol1(this);
+                    } else if (Main.JEU.getCol2() == null) {
+                        Main.JEU.setCol2(this);
+                    }
+                    if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
+                        Main.JEU.bougerPion();
 
-                    Main.JEU.setCol1(null);
-                    Main.JEU.setCol2(null);
+                        Main.JEU.setCol1(null);
+                        Main.JEU.setCol2(null);
 
+                    }
                 }
 
 
@@ -128,18 +136,18 @@ public class ColonneDeJeu extends StackPane {
                         col2.nbPionsNoir--;
                         Main.JEU.getPlateau().getPrisonNoir().setColNoir(Main.JEU.getPlateau().getPrisonNoir().getNbPionsNoir() + 1);
 
-                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+                        //System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+                        //System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+                        //System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
                         Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                     } else {
                         this.nbPionsBlanc--;
                         col2.nbPionsBlanc++;
 
-                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+                        //System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+                        //System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+                        //System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
                          Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv())); // a faire, un if avec un getcoutdumouv !=100
                     }

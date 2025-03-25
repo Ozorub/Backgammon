@@ -5,6 +5,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,8 +19,8 @@ public class BgPane extends BorderPane {
     ColonneDeJeu colonneDeJeu;
     VBox dice = new VBox();
     VBox prisons = new VBox();
-    private ColonneDeJeu prisonBlanc;
-    private ColonneDeJeu prisonNoir;
+    private final ColonneDeJeu prisonBlanc;
+    private final ColonneDeJeu prisonNoir;
 
 
     public ColonneDeJeu getPrisonNoir() {
@@ -82,28 +83,7 @@ public class BgPane extends BorderPane {
 
         Label de1 = new Label("Dé 1: pas lancé");
         Label de2 = new Label("Dé 2: pas lancé");
-        Button lancer = new Button("Lancer les dés");
-
-        lancer.setOnAction(e -> {
-            if (Main.JEU.getResteDes().isEmpty()) {
-                Main.JEU.lancerDes();
-                de1.setText("Dé 1 : "+Main.JEU.valeurDes()[0]);
-                de2.setText("Dé 2 : "+Main.JEU.valeurDes()[1]);
-
-                ArrayList<Integer> nouvelleListe = new ArrayList<>();
-                nouvelleListe.add(Main.JEU.valeurDes()[0]);
-                nouvelleListe.add(Main.JEU.valeurDes()[1]);
-                if (Main.JEU.valeurDes()[0] == Main.JEU.valeurDes()[1]) {
-                    nouvelleListe.add(Main.JEU.valeurDes()[0]);
-                    nouvelleListe.add(Main.JEU.valeurDes()[1]);
-                }
-
-                Main.JEU.setDesLances(true);
-                Main.JEU.setResteDes(nouvelleListe);
-
-                new CoutsPossibles().calculCoutsPossibles(Main.JEU.getCurrentJoueur(), Main.JEU.getResteDes());
-            }
-        });
+        Button lancer = getButtonLancer(de1, de2);
 
 
         dice.getChildren().addAll(de1,de2,lancer, new Label("Les blancs commencent"));
@@ -111,6 +91,40 @@ public class BgPane extends BorderPane {
         this.setLeft(dice);
 
     }
+
+    private static Button getButtonLancer(Label de1, Label de2) {
+        Button lancer = new Button("Lancer les dés");
+
+        lancer.setOnAction(_ -> {
+            if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc.getClass() == Human.class
+                    ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir.getClass() == Human.class) {
+                if (Main.JEU.getResteDes().isEmpty()) {
+                    Main.JEU.lancerDes();
+                    de1.setText("Dé 1 : "+ Jeu.valeurDes()[0]);
+                    de2.setText("Dé 2 : "+ Jeu.valeurDes()[1]);
+
+                    ArrayList<Integer> nouvelleListe = new ArrayList<>();
+                    nouvelleListe.add(Jeu.valeurDes()[0]);
+                    nouvelleListe.add(Jeu.valeurDes()[1]);
+                    if (Jeu.valeurDes()[0] == Jeu.valeurDes()[1]) {
+                        nouvelleListe.add(Jeu.valeurDes()[0]);
+                        nouvelleListe.add(Jeu.valeurDes()[1]);
+                    }
+
+                    List<ColonneDeJeu[]> couts = new CoutsPossibles().calculCoutsPossibles(Main.JEU.getCurrentJoueur(), nouvelleListe);
+                    if (!couts.isEmpty()) {
+                        Main.JEU.setDesLances(true);
+                        Main.JEU.setResteDes(nouvelleListe);
+                    }
+                    else {
+                        //TODO : retourner au joueur suivant
+                    }
+                }
+            }
+        });
+        return lancer;
+    }
+
     /**
      * Permet de récuper un élément d'un gridPane en fonction de ses coordonées
      */

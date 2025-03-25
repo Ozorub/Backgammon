@@ -231,7 +231,7 @@ public class Jeu {
 
 
     public void deplacerPion(Joueur j) {
-        System.out.println("Je rentre dans la méthode deplacer pion");
+        //System.out.println("Je rentre dans la méthode deplacer pion");
         if (col1.getRow() == col2.getRow()) {
             coutDuMouv = Math.abs(col1.getCol() - col2.getCol());
         } else {
