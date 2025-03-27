@@ -11,4 +11,9 @@ public class IA_hard extends IA{
     ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible) {
         return new ColonneDeJeu[0];
     }
+
+    @Override
+    public int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr) {
+        return 0;
+    }
 }

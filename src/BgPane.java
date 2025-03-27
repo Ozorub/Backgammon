@@ -55,8 +55,8 @@ public class BgPane extends BorderPane {
             }
         }
         setBordPlateau(grille);
-        //setUpEndGame(grille);
-        setUpGame(grille);
+        setUpEndGame(grille);
+        //setUpGame(grille);
 
         this.setCenter(grille);
 
@@ -95,7 +95,7 @@ public class BgPane extends BorderPane {
     private static Button getButtonLancer(Label de1, Label de2) {
         Button lancer = new Button("Lancer les dés");
 
-        lancer.setOnAction(_ -> {
+        lancer.setOnAction(v -> {
             if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc.getClass() == Human.class
                     ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir.getClass() == Human.class) {
                 if (Main.JEU.getResteDes().isEmpty()) {
@@ -111,8 +111,8 @@ public class BgPane extends BorderPane {
                         nouvelleListe.add(Jeu.valeurDes()[1]);
                     }
 
-                    List<ColonneDeJeu[]> couts = new CoutsPossibles().calculCoutsPossibles(Main.JEU.getCurrentJoueur(), nouvelleListe);
-                    if (!couts.isEmpty()) {
+                    List<ColonneDeJeu[]> coups = new CoupsPossibles().calculCoupsPossibles(Main.JEU.getCurrentJoueur(), nouvelleListe);
+                    if (!coups.isEmpty()) {
                         Main.JEU.setDesLances(true);
                         Main.JEU.setResteDes(nouvelleListe);
                     }
@@ -182,9 +182,9 @@ public class BgPane extends BorderPane {
 //        getColonneDeJeu(gp,1,9).setColBlanc(2);
 //        getColonneDeJeu(gp,1,10).setColBlanc(2);
 //        getColonneDeJeu(gp,1,11).setColBlanc(2);
-        getColonneDeJeu(gp,0,6).setColNoir(2);
-        getColonneDeJeu(gp,0,7).setColNoir(2);
-        getColonneDeJeu(gp,0,8).setColNoir(2);
+//        getColonneDeJeu(gp,0,6).setColNoir(2);
+//        getColonneDeJeu(gp,0,7).setColNoir(2);
+//        getColonneDeJeu(gp,0,8).setColNoir(2);
 //        getColonneDeJeu(gp,0,9).setColNoir(2);
 //        getColonneDeJeu(gp,0,10).setColNoir(2);
 //        getColonneDeJeu(gp,0,11).setColNoir(2);

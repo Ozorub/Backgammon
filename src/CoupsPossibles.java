@@ -2,34 +2,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CoutsPossibles {
+public class CoupsPossibles {
 
     private final ArrayList<ColonneDeJeu> allCols;
     private static final ColonneDeJeu END_COL = new ColonneDeJeu(200,200);
 
-    public CoutsPossibles() {
+    public CoupsPossibles() {
         allCols = Main.JEU.getPlateau().getAllColonnesDeJeu();
     }
 
 
 
     /**
-     * Calcul les couts possibles pour un joueur
-     * @param joueur le joueur pour lequel on veut calculer les couts possibles (le joueur courant).
+     * Calcul les coups possibles pour un joueur
+     * @param joueur le joueur pour lequel on veut calculer les coups possibles (le joueur courant).
      * @return une liste de tableaux d'entiers, chaque tableau contient 2 entiers, le premier est la colonne de départ, le second la colonne d'arrivée
      */
-    public List<ColonneDeJeu[]> calculCoutsPossibles(Joueur joueur, List<Integer> desAJouer){
+    public List<ColonneDeJeu[]> calculCoupsPossibles(Joueur joueur, List<Integer> desAJouer){
 
         Jeu jeu = Main.JEU;
 
-        ArrayList<ColonneDeJeu[]> coutsPossibles = new ArrayList<>();
+        ArrayList<ColonneDeJeu[]> coupsPossibles = new ArrayList<>();
 
         //gestion pion prison
         if (jeu.getPlateau().getPrisonNoir().getNbPionsNoir() != 0 && joueur == Joueur.NOIR){
-            coutsPossibles.addAll(coutsPossibles(jeu.getPlateau().getPrisonNoir(), joueur,desAJouer));
+            coupsPossibles.addAll(coupsPossibles(jeu.getPlateau().getPrisonNoir(), joueur,desAJouer));
         }
         else if (jeu.getPlateau().getPrisonBlanc().getNbPionsBlanc() != 0 && joueur == Joueur.BLANC){
-            coutsPossibles.addAll(coutsPossibles(jeu.getPlateau().getPrisonBlanc(), joueur,desAJouer));
+            coupsPossibles.addAll(coupsPossibles(jeu.getPlateau().getPrisonBlanc(), joueur,desAJouer));
         }
 
         //cas des endgames
@@ -37,7 +37,7 @@ public class CoutsPossibles {
             desAJouer.forEach(de -> {
                 ColonneDeJeu colonne = allCols.get(24 - 2*de);
                 if (colonne.getNbPionsNoir() > 0){
-                    coutsPossibles.add(new ColonneDeJeu[]{colonne, END_COL});
+                    coupsPossibles.add(new ColonneDeJeu[]{colonne, END_COL});
                 }
                 else{
                     ColonneDeJeu melenchon = allCols.get(22); // le plus a gauche possible
@@ -48,10 +48,10 @@ public class CoutsPossibles {
                         }
                     }
                     if (melenchon.getCol() < 12 - de){
-                        coutsPossibles.addAll(coutsPossibles(melenchon, joueur, Collections.singletonList(de)));
+                        coupsPossibles.addAll(coupsPossibles(melenchon, joueur, Collections.singletonList(de)));
                     }
                     else if (melenchon.getCol() > 12 - de){
-                        coutsPossibles.add(new ColonneDeJeu[]{melenchon, END_COL});
+                        coupsPossibles.add(new ColonneDeJeu[]{melenchon, END_COL});
                     }
                 }
             });
@@ -61,7 +61,7 @@ public class CoutsPossibles {
             desAJouer.forEach(de -> {
                 ColonneDeJeu colonne = allCols.get(25 - 2*de);
                 if (colonne.getNbPionsBlanc() > 0){
-                    coutsPossibles.add(new ColonneDeJeu[]{colonne, END_COL});
+                    coupsPossibles.add(new ColonneDeJeu[]{colonne, END_COL});
                 }
                 else{
                     ColonneDeJeu melenchon = allCols.get(23); // le plus a gauche possible
@@ -72,10 +72,10 @@ public class CoutsPossibles {
                         }
                     }
                     if (melenchon.getCol() < 12 - de){
-                        coutsPossibles.addAll(coutsPossibles(melenchon, joueur, Collections.singletonList(de)));
+                        coupsPossibles.addAll(coupsPossibles(melenchon, joueur, Collections.singletonList(de)));
                     }
                     else if (melenchon.getCol() > 12 - de){
-                        coutsPossibles.add(new ColonneDeJeu[]{melenchon, END_COL});
+                        coupsPossibles.add(new ColonneDeJeu[]{melenchon, END_COL});
                     }
                 }
             });
@@ -85,42 +85,42 @@ public class CoutsPossibles {
         else{
             allCols.forEach(col -> {
                 if (col.getNbPionsNoir() > 0 && joueur == Joueur.NOIR || col.getNbPionsBlanc() > 0 && joueur == Joueur.BLANC){
-                    coutsPossibles.addAll(coutsPossibles(col, joueur,desAJouer));
+                    coupsPossibles.addAll(coupsPossibles(col, joueur,desAJouer));
                 }
             });
         }
 
-        return coutsPossibles;
+        return coupsPossibles;
     }
 
     /**
-     * Calcul les couts possibles pour une colonne
+     * Calcul les coups possibles pour une colonne
      *
      * @param col colonne à étudier
      * @param joueur joueur
      * @param desAJouer liste des dés restants
      * @return une liste de tableaux d'entiers, chaque tableau contient 2 entiers, le premier est la colonne de départ, le second la colonne d'arrivée
      */
-    private List<ColonneDeJeu[]> coutsPossibles(ColonneDeJeu col, Joueur joueur, List<Integer> desAJouer){
+    private List<ColonneDeJeu[]> coupsPossibles(ColonneDeJeu col, Joueur joueur, List<Integer> desAJouer){
 
-        ArrayList<ColonneDeJeu[]> coutsPossibles = new ArrayList<>();
+        ArrayList<ColonneDeJeu[]> coupsPossibles = new ArrayList<>();
 
         if (col.getCol() == 100){ //prison
             for (int i = 12; i < 24; i++) {
                 if (joueur == Joueur.BLANC){
                     ColonneDeJeu colonne = allCols.get(i);
                     if(colonne.getRow() == 0 && colonne.getNbPionsNoir() <= 1 && desAJouer.contains(12 - colonne.getCol())){
-                        coutsPossibles.add(new ColonneDeJeu[]{col, colonne}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                        coupsPossibles.add(new ColonneDeJeu[]{col, colonne}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                     }
                 }
                 else if(joueur == Joueur.NOIR){
                     ColonneDeJeu colonne = allCols.get(i);
                     if(colonne.getRow() == 1 && colonne.getNbPionsBlanc() <= 1 && desAJouer.contains(12 - colonne.getCol())){
-                        coutsPossibles.add(new ColonneDeJeu[]{col, colonne}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                        coupsPossibles.add(new ColonneDeJeu[]{col, colonne}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                     }
                 }
             }
-            return coutsPossibles;
+            return coupsPossibles;
         }
         
 
@@ -134,34 +134,34 @@ public class CoutsPossibles {
                            if (col.getRow() == col2.getRow()) {
                                if (col.getRow() == 1) {
                                    if (col2.getCol() == col.getCol() + i ){ //si la colonne d'arrivée est la colonne de départ + la valeur du dé
-                                           coutsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                                           coupsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                                    }
                                }
                                else { //col.getRow() == 0
                                    if (col2.getCol() == col.getCol() - i ){ //si la colonne d'arrivée est la colonne de départ + la valeur du dé
-                                       coutsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                                       coupsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                                    }
                                }
                            } else {
                                if (col2.getRow() == 1 && col.getRow() == 0 && i == col.getCol() + col2.getCol() + 1 ){
-                                   coutsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                                   coupsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                                }
                            }
                        }else { //si le joueur est noir
                            if (col.getRow() == col2.getRow()) {
                                if (col.getRow() == 1) {
                                    if (col2.getCol() == col.getCol() - i ){ //si la colonne d'arrivée est la colonne de départ + la valeur du dé
-                                       coutsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                                       coupsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                                    }
                                }
                                else { //col.getRow() == 0
                                    if (col2.getCol() == col.getCol() + i ){ //si la colonne d'arrivée est la colonne de départ + la valeur du dé
-                                       coutsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                                       coupsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                                    }
                                }
                            } else {
                                if (col2.getRow() == 0 && col.getRow() == 1 && i == col.getCol() + col2.getCol() + 1 ){
-                                   coutsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le cout {colonne de départ, colonne d'arrivée}
+                                   coupsPossibles.add(new ColonneDeJeu[]{col, col2}); //on ajoute le coup {colonne de départ, colonne d'arrivée}
                                }
                            }
                        }
@@ -170,7 +170,7 @@ public class CoutsPossibles {
             });
         }
 
-        return coutsPossibles;
+        return coupsPossibles;
     }
 
 }

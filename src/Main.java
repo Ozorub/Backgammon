@@ -68,7 +68,7 @@ public class Main extends Application {
         root.setRight(layout2);
 
         Button ok = new Button("valider les choix.");
-        ok.setOnMouseClicked((_)->{
+        ok.setOnMouseClicked((v)->{
             stage.close();
 
             ouvrirJeu();

@@ -2,7 +2,6 @@ import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
@@ -52,7 +51,7 @@ public abstract class IA extends JoueurClass{
             nouvelleListe.add(Jeu.valeurDes()[1]);
         }
 
-        List<ColonneDeJeu[]> couts = new CoutsPossibles().calculCoutsPossibles(Main.JEU.getCurrentJoueur(), nouvelleListe);
+        List<ColonneDeJeu[]> couts = new CoupsPossibles().calculCoupsPossibles(Main.JEU.getCurrentJoueur(), nouvelleListe);
 
         if (!couts.isEmpty()) {
 
@@ -76,6 +75,8 @@ public abstract class IA extends JoueurClass{
     }
 
     abstract ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible);
+
+    public abstract int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr);
 
 
 }
