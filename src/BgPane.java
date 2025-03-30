@@ -21,6 +21,7 @@ public class BgPane extends BorderPane {
     VBox prisons = new VBox();
     private final ColonneDeJeu prisonBlanc;
     private final ColonneDeJeu prisonNoir;
+    private RepPlateau plateau;
 
 
     public ColonneDeJeu getPrisonNoir() {
@@ -35,7 +36,7 @@ public class BgPane extends BorderPane {
 
     public BgPane() {
         grille = new GridPane();
-
+        plateau = new RepPlateau();
         for(int col = 0 ; col< NBCOL ; col ++){
             for(int row = 0; row< NBROW; row ++){
                 colonneDeJeu = new ColonneDeJeu();
@@ -55,8 +56,8 @@ public class BgPane extends BorderPane {
             }
         }
         setBordPlateau(grille);
-        setUpEndGame(grille);
-        //setUpGame(grille);
+        //setUpEndGame(grille);
+        setUpGame(grille,plateau);
 
         this.setCenter(grille);
 
@@ -162,9 +163,9 @@ public class BgPane extends BorderPane {
     }
 
     /**
-     * Méthode qui dispose le plateau de jeu dans la disposition de base
+     * Méthode qui dispose le plateau de jeu dans la disposition de base, ainsi que sa représentation Mathématique
      */
-    public void setUpGame(GridPane gp) {
+    public void setUpGame(GridPane gp, RepPlateau plateau) {
         getColonneDeJeu(gp,0,0).setColBlanc(5);
         getColonneDeJeu(gp,0,4).setColNoir(3);
         getColonneDeJeu(gp,0,6).setColNoir(5);
@@ -173,6 +174,17 @@ public class BgPane extends BorderPane {
         getColonneDeJeu(gp,1,4).setColBlanc(3);
         getColonneDeJeu(gp,1,6).setColBlanc(5);
         getColonneDeJeu(gp,1,11).setColNoir(2);
+
+        plateau.setColPlateau(0,0,true,5);
+        plateau.setColPlateau(0,4,false, 3);
+        plateau.setColPlateau(0,6,false,5);
+        plateau.setColPlateau(0,11,true,2);
+        plateau.setColPlateau(1,0,false,5);
+        plateau.setColPlateau(1,4,true,3);
+        plateau.setColPlateau(1,6,true,5);
+        plateau.setColPlateau(1,11,false,2);
+        System.out.println(plateau.getCell(0,0));
+
     }
 
     public void setUpEndGame(GridPane gp){

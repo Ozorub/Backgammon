@@ -12,7 +12,8 @@ public class IA_intermediate extends IA{
     }
 
     @Override
-    public int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr) {
+    public int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr, boolean isWhite) {
+
         return 0;
     }
 }

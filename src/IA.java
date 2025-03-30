@@ -8,12 +8,14 @@ import java.util.concurrent.FutureTask;
 import static java.lang.Thread.sleep;
 
 public abstract class IA extends JoueurClass{
+    CoupsPossibles cp;
 
     public IA(){
         new Thread(() -> {
             while (true) {
                 try {
                     sleep(1000);
+                    cp = new CoupsPossibles(); // TODO je ne sais pas trop s'il faut mettre ça la
                     if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
                             ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
 
@@ -76,7 +78,7 @@ public abstract class IA extends JoueurClass{
 
     abstract ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible);
 
-    public abstract int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr);
+    public abstract int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr, boolean isWhite);
 
 
 }

@@ -12,11 +12,35 @@ public class IA_easy_baby extends IA{
     }
 
     @Override
-    public int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr) {
+    public int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr, boolean isWhite) {
+        int gain = 0;
+        int colArr = dep_arr[1].getCol();
+        int rowArr = dep_arr[1].getRow();
+        if (plateau.getCell(rowArr, colArr).getNbPionsBlancs() == 0 && plateau.getCell(rowArr, colArr).getNbPionsNoirs() == 0) {
+            gain = 1;
+        } // Pas terrible de d'avoir une colonne avec un seul pion
+        else if (isWhite) {
+            if (plateau.getCell(rowArr, colArr).getNbPionsNoirs() == 1) {
+                gain += 10;
+            } // mettre en prison l'adversaire, c'est super
+            else if (plateau.getCell(rowArr, colArr).getNbPionsBlancs() == 1) {
+                gain += 3;
+            } // Ajouter un pion à une colonne avec un seul pion de sa couleur est bien
 
 
+        } else {
+            if (plateau.getCell(rowArr, colArr).getNbPionsBlancs() == 1) {
+                gain += 10;
+            } // mettre en prison l'adversaire, c'est super
+            else if (plateau.getCell(rowArr, colArr).getNbPionsNoirs() == 1) {
+                gain += 3;
+            } // Ajouter un pion à une colonne avec un seul pion de sa couleur est bien
 
-        return 0;
+
+        }
+
+
+        return gain;
     }
 
 
