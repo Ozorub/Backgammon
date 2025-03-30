@@ -97,14 +97,19 @@ public class ColonneDeJeu extends StackPane {
                         ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir.getClass() == Human.class) {
                     if (Main.JEU.getCol1() == null) {
                         Main.JEU.setCol1(this);
+                        Main.JEU.getCol1().fond.setFill(Color.VIOLET);
                     } else if (Main.JEU.getCol2() == null) {
                         Main.JEU.setCol2(this);
+                        Main.JEU.getCol1().fond.setFill(Color.BURLYWOOD);
+
                     }
                     if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
                         Main.JEU.bougerPion();
 
                         Main.JEU.setCol1(null);
                         Main.JEU.setCol2(null);
+
+
 
                     }
                 }
