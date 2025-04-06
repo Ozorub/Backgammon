@@ -169,18 +169,18 @@ public class ColonneDeJeu extends StackPane {
                         col2.nbPionsBlanc--;
                         Main.JEU.getPlateau().getPrisonBlanc().setColBlanc(Main.JEU.getPlateau().getPrisonBlanc().getNbPionsBlanc() + 1);
 
-                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+                        //System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+//                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+//                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
                         Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                     } else {
                         this.nbPionsNoir--;
                         col2.nbPionsNoir++;
 
-                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+//                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+//                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+//                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
                         Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
                     }
@@ -192,9 +192,9 @@ public class ColonneDeJeu extends StackPane {
                     System.out.println("Pas de pions blancs dans cette colonne");
                 } else {
                     this.nbPionsBlanc--;
-                    System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                    System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                    System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+//                    System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+//                    System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+//                    System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
                     Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
 
                 }
@@ -203,9 +203,9 @@ public class ColonneDeJeu extends StackPane {
                     System.out.println("Pas de pions noirs dans cette colonne");
                 } else {
                     this.nbPionsNoir--;
-                    System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                    System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                    System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+//                    System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+//                    System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+//                    System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
                     Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
 
