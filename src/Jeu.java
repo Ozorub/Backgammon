@@ -247,6 +247,7 @@ public class Jeu {
                 else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
                 desLances = false;
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
+                System.out.println("joeur have switched");
             }
         }
     }
