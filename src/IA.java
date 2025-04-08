@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import static java.lang.Thread.sleep;
+import static java.util.Collections.max;
 
 public abstract class IA extends JoueurClass{
     CoupsPossibles cp;
@@ -79,6 +80,36 @@ public abstract class IA extends JoueurClass{
     abstract ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible);
 
     public abstract int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr, boolean isWhite);
+
+    public ColonneDeJeu[] minMaxdecision(List<ColonneDeJeu[]> coupsPossibles, RepPlateau plateau){
+        ArrayList<Integer> values = new ArrayList<>(coupsPossibles.size());
+        coupsPossibles.forEach(coupWesh -> {
+            int rowD = coupWesh[0].getRow() ;
+            int colD = coupWesh[0].getCol() ;
+            int rowA = coupWesh[1].getRow() ;
+            int colA = coupWesh[0].getCol() ;
+
+            values.add(minValue(plateau.deplacementPion(rowD, colD,rowA,colA,Main.JEU.getCurrentJoueur() == Joueur.BLANC)));
+        });
+        return coupsPossibles.get(values.indexOf(max(values))); // on retourne le coup possible correspondant au max des valeurs que "MIN" renvoi"
+    }
+
+    public int minValue(RepPlateau plateau){
+        return 0;
+    }
+
+    public int maxValue(RepPlateau plateau){
+        return 0;
+    }
+
+    public boolean terminalTest(List<ColonneDeJeu[]> coupsPossible, RepPlateau plateau){
+        if (coupsPossible.isEmpty() || plateau.whiteWin() || plateau.blackWin()){
+            return true;
+        }
+        return false;
+
+    }
+
 
 
 }
