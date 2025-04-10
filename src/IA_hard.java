@@ -13,7 +13,7 @@ public class IA_hard extends IA{
     }
 
     @Override
-    public int calculGain(RepPlateau plateau, ColonneDeJeu[] dep_arr, boolean isWhite) {
+    public int calculGain(RepPlateau plateau, int[] dep_arr, boolean isWhite) {
         return 0;
     }
 }

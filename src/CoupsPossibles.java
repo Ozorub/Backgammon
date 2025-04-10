@@ -173,4 +173,9 @@ public class CoupsPossibles {
         return coupsPossibles;
     }
 
+    //TODO : faire la meme chose pour le RepPlateau : les coups possibles sont un List<int[]> et pas un List<ColonneDeJeu[]> : chaque int[] contient 4 entiers : la ligne de départ, la colonne de départ, la ligne d'arrivée et la colonne d'arrivée
+    public List<int[]> coupsPossibleRepPlateau(Joueur j, RepPlateau plateau, int[] des){
+        return new ArrayList<>();
+    }
+
 }

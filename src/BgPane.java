@@ -36,7 +36,7 @@ public class BgPane extends BorderPane {
 
     public BgPane() {
         grille = new GridPane();
-        plateau = new RepPlateau();
+        //plateau = new RepPlateau();
         for(int col = 0 ; col< NBCOL ; col ++){
             for(int row = 0; row< NBROW; row ++){
                 colonneDeJeu = new ColonneDeJeu();
@@ -175,15 +175,15 @@ public class BgPane extends BorderPane {
         getColonneDeJeu(gp,1,6).setColBlanc(5);
         getColonneDeJeu(gp,1,11).setColNoir(2);
 
-        plateau.setColPlateau(0,0,true,5);
-        plateau.setColPlateau(0,4,false, 3);
-        plateau.setColPlateau(0,6,false,5);
-        plateau.setColPlateau(0,11,true,2);
-        plateau.setColPlateau(1,0,false,5);
-        plateau.setColPlateau(1,4,true,3);
-        plateau.setColPlateau(1,6,true,5);
-        plateau.setColPlateau(1,11,false,2);
-        System.out.println(plateau.getCell(0,0));
+//        plateau.setColPlateau(0,0,true,5);
+//        plateau.setColPlateau(0,4,false, 3);
+//        plateau.setColPlateau(0,6,false,5);
+//        plateau.setColPlateau(0,11,true,2);
+//        plateau.setColPlateau(1,0,false,5);
+//        plateau.setColPlateau(1,4,true,3);
+//        plateau.setColPlateau(1,6,true,5);
+//        plateau.setColPlateau(1,11,false,2);
+//        System.out.println(plateau.getCell(0,0));
 
     }
 

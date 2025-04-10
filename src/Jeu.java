@@ -59,11 +59,6 @@ public class Jeu {
 //    }
 
 
-    public Joueur getJ1() {
-        return j1;
-    }
-
-
     void bougerPion() {
         try {
 
@@ -239,16 +234,29 @@ public class Jeu {
         }
 
         if (resteDes.contains(coutDuMouv)) {
+
             col1.updateColonne(currentJoueur, col2, 1);
+
             coutDuMouv = 0;
             if (resteDes.isEmpty()) {
                 if (j == Joueur.BLANC)
                     plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
                 else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
                 desLances = false;
+
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
-                System.out.println("joeur have switched");
+
+
+                System.out.println("joueur have switched");
             }
+//            //TEST
+//            synchronized (IA.getLock()) {
+//                if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
+//                        ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
+//                    IA.setHasAiAlreadyPlayed(false);
+//                    IA.getLock().notifyAll();
+//                }
+//            }
         }
     }
 
@@ -272,6 +280,14 @@ public class Jeu {
                 desLances = false;
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
             }
+//            //TEST
+//            synchronized (IA.getLock()) {
+//                if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
+//                        ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
+//                    IA.setHasAiAlreadyPlayed(false);
+//                    IA.getLock().notifyAll();
+//                }
+//            }
         }
     }
 
@@ -286,12 +302,22 @@ public class Jeu {
                     plateau.dice.getChildren().set(3, new Label("Tour des noirs")); // Le 3 corespond à sa place dans le VBox de la partie gauche du BorderPane
                 else plateau.dice.getChildren().set(3, new Label("Tour des blancs"));
                 desLances = false;
+
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
             }
+            //TEST
+//            synchronized (IA.getLock()) {
+//                if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
+//                        ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
+//                    IA.setHasAiAlreadyPlayed(false);
+//                    IA.getLock().notifyAll();
+//                }
+//            }
         } else {
 
             System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
         }
+
     }
 
     public void supprPion(Joueur j, ColonneDeJeu colonneDeJeu) {
@@ -307,8 +333,14 @@ public class Jeu {
                 desLances = false;
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
             }
-        } else {
-            //System.out.println("Recommence, Tu ne peux pas prendre de pions ici");
+            //TEST
+//            synchronized (IA.getLock()) {
+//                if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
+//                        ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
+//                    IA.setHasAiAlreadyPlayed(false);
+//                    IA.getLock().notifyAll();
+//                }
+//            }
         }
     }
 
@@ -413,5 +445,16 @@ public class Jeu {
 
     public Joueur getCurrentJoueur() {
         return currentJoueur;
+    }
+
+    public void setCurrentJoueur(Joueur j) {
+        this.currentJoueur = j;
+    }
+
+    public Joueur getJ1() {
+        return j1;
+    }
+    public Joueur getJ2() {
+        return j2;
     }
 }

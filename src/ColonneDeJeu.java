@@ -214,6 +214,7 @@ public class ColonneDeJeu extends StackPane {
             }
         }
 
+
         this.updateGraphics();
         col2.updateGraphics();
 
@@ -270,6 +271,7 @@ public class ColonneDeJeu extends StackPane {
      * Les deux méthodes qui suivent permettent de remplir une colonne avec un nombre {@param nb}souhaité de pions, blancs ou noirs
      */
     public void setColBlanc(int nb) {
+
 
         nbPionsBlanc = nb;
         this.updateGraphics();
