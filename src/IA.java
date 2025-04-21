@@ -10,8 +10,8 @@ import static java.util.Collections.max;
 public abstract class IA extends JoueurClass{
 
     //private static final Object lock = new Object();
-    private int nbOfMoves = 0;
     private List<ColonneDeJeu[]> couts = new ArrayList<>();
+    public static boolean hasAiAlreadyPlayed = false;
 
     public IA(){
         new Thread(() -> {
@@ -21,17 +21,24 @@ public abstract class IA extends JoueurClass{
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                System.out.println(hasAiAlreadyPlayed? "IA a déjà joué" : "IA n'a pas encore joué");
+                if (!hasAiAlreadyPlayed) {
                     if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
                             ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
 
-                            Platform.runLater(() -> {
-                                try {
-                                    makeAmove();
-                                } catch (InterruptedException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                        }
+                        //hasAiAlreadyPlayed = true;
+                        Platform.runLater(() -> {
+                            try {
+                                makeAmove();
+
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        }else {
+                        IA.hasAiAlreadyPlayed = false;
+                    }
+                }
             }
         }).start();
     };
@@ -39,28 +46,27 @@ public abstract class IA extends JoueurClass{
     public void makeAmove() throws InterruptedException {
 
         int nbCoutsPossible = 0;
-        if(nbOfMoves == 0){
-            Main.JEU.lancerDes(); //un move a chaque fois ... TODO : les deux !
 
-            Main.JEU.setDesLances(true);
+        Main.JEU.lancerDes(); //un move a chaque fois ... TODO : les deux !
 
-            ArrayList<Integer> nouvelleListe = new ArrayList<>();
+        Main.JEU.setDesLances(true);
+
+        ArrayList<Integer> nouvelleListe = new ArrayList<>();
+        nouvelleListe.add(Jeu.valeurDes()[0]);
+        nouvelleListe.add(Jeu.valeurDes()[1]);
+        if (Jeu.valeurDes()[0] == Jeu.valeurDes()[1]) {
             nouvelleListe.add(Jeu.valeurDes()[0]);
             nouvelleListe.add(Jeu.valeurDes()[1]);
-            if (Jeu.valeurDes()[0] == Jeu.valeurDes()[1]) {
-                nouvelleListe.add(Jeu.valeurDes()[0]);
-                nouvelleListe.add(Jeu.valeurDes()[1]);
-            }
-
-            nbCoutsPossible = nouvelleListe.size();
-            Main.JEU.setResteDes(nouvelleListe);
-
-
         }
+
+        nbCoutsPossible = nouvelleListe.size();
+        Main.JEU.setResteDes(nouvelleListe);
+
+
 
         couts = new CoupsPossibles().calculCoupsPossibles(Main.JEU.getCurrentJoueur(), Main.JEU.getResteDes());
 
-        if (!couts.isEmpty() && nbOfMoves <= nbCoutsPossible) {
+        if (!couts.isEmpty()) {
 
             ColonneDeJeu[] bestMove = getBestMove(couts);
 
@@ -77,15 +83,14 @@ public abstract class IA extends JoueurClass{
 //            Main.JEU.getCol1().updateColonne(Main.JEU.getCurrentJoueur(), Main.JEU.getCol2(), 1);
 
             Main.JEU.bougerPion();
-            nbOfMoves++;
 
             Main.JEU.setCol1(null);
             Main.JEU.setCol2(null);
 
         }
         else {
+            IA.hasAiAlreadyPlayed = true;
             Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Main.JEU.getJ1()?Main.JEU.getJ2():Main.JEU.getJ1());
-            nbOfMoves = 0;
             Main.JEU.setDesLances(false);
         }
     }
