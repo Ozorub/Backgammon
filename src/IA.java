@@ -1,7 +1,11 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Integer.min;
 import static java.lang.Thread.sleep;
@@ -10,34 +14,51 @@ import static java.util.Collections.max;
 public abstract class IA extends JoueurClass{
 
     //private static final Object lock = new Object();
-    private List<ColonneDeJeu[]> couts = new ArrayList<>();
+    private List<ColonneDeJeu[]> coups = new ArrayList<>();
     public static boolean hasAiAlreadyPlayed = false;
 
     public IA(){
         new Thread(() -> {
+            //while (true) {
+//         //           try {
+//                        sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
             while (true) {
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                System.out.println(hasAiAlreadyPlayed? "IA a déjà joué" : "IA n'a pas encore joué");
-                if (!hasAiAlreadyPlayed) {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println(hasAiAlreadyPlayed ? "IA a déjà joué" : "IA n'a pas encore joué");
+                if (true) {
                     if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
-                            ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
+                            || Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
 
                         //hasAiAlreadyPlayed = true;
+
+                        CountDownLatch latch = new CountDownLatch(1);
+
                         Platform.runLater(() -> {
                             try {
                                 makeAmove();
+                                latch.countDown();
 
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
+                            } catch (InterruptedException ex) {
+                                throw new RuntimeException(ex);
                             }
+
                         });
-                        }else {
-                        IA.hasAiAlreadyPlayed = false;
+
+                        try {
+                            latch.await();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                } else {
+                    //IA.hasAiAlreadyPlayed = false;
                 }
             }
         }).start();
@@ -64,35 +85,70 @@ public abstract class IA extends JoueurClass{
 
 
 
-        couts = new CoupsPossibles().calculCoupsPossibles(Main.JEU.getCurrentJoueur(), Main.JEU.getResteDes());
+        coups = new CoupsPossibles().calculCoupsPossibles(Main.JEU.getCurrentJoueur(), Main.JEU.getResteDes());
 
-        if (!couts.isEmpty()) {
+        final int[] index = {0};
 
-            ColonneDeJeu[] bestMove = getBestMove(couts);
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.millis(500), e -> {
+//                    if (index[0] >= coups.size()) {
+//                        IA.hasAiAlreadyPlayed = true;
+//                        Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Main.JEU.getJ1() ? Main.JEU.getJ2() : Main.JEU.getJ1());
+//                        Main.JEU.setDesLances(false);
+//                        return;
+//                    }
 
-            Main.JEU.setCol1(bestMove[0]);
-            Main.JEU.setCol2(bestMove[1]);
+                    IA.hasAiAlreadyPlayed = true;
+                  Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Main.JEU.getJ1() ? Main.JEU.getJ2() : Main.JEU.getJ1());
+                  Main.JEU.setDesLances(false);
+                    ColonneDeJeu[] bestMove = getBestMove(coups);
+
+                    Main.JEU.setCol1(bestMove[0]);
+                    Main.JEU.setCol2(bestMove[1]);
+
+                    Main.JEU.bougerPion();
+
+                    Main.JEU.setCol1(null);
+                    Main.JEU.setCol2(null);
+
+                    coups.remove(bestMove); // évite de rejouer le même
+                    index[0]++;
 
 
-//            if (Main.JEU.getCol1().getRow() == Main.JEU.getCol2().getRow()) {
-//                Main.JEU.coutDuMouv = Math.abs(Main.JEU.getCol1().getCol() - Main.JEU.getCol2().getCol());
-//            } else {
-//                Main.JEU.coutDuMouv = Main.JEU.getCol1().getCol() + Main.JEU.getCol2().getCol() + 1;
-//            }
+
+
+
+
+
+
+
+//        while (!coups.isEmpty()) {
 //
-//            Main.JEU.getCol1().updateColonne(Main.JEU.getCurrentJoueur(), Main.JEU.getCol2(), 1);
+//            ColonneDeJeu[] bestMove = getBestMove(coups);
+//
+//            Main.JEU.setCol1(bestMove[0]);
+//            Main.JEU.setCol2(bestMove[1]);
+//
+////     //       if (Main.JEU.getCol1().getRow() == Main.JEU.getCol2().getRow()) {
+////     //           Main.JEU.coutDuMouv = Math.abs(Main.JEU.getCol1().getCol() - Main.JEU.getCol2().getCol());
+////    //        } else {
+////   //             Main.JEU.coutDuMouv = Main.JEU.getCol1().getCol() + Main.JEU.getCol2().getCol() + 1;
+////   //         }
+//////
+//// //           Main.JEU.getCol1().updateColonne(Main.JEU.getCurrentJoueur(), Main.JEU.getCol2(), 1);
+//
+//            Main.JEU.bougerPion();
+//            Main.JEU.setCol1(null);
+//            Main.JEU.setCol2(null);
+//            coups.remove(bestMove);
+//            Thread.sleep(100);
+//        }
+//
+//            System.out.println("je rentre une fois ici");
+//            IA.hasAiAlreadyPlayed = true;
+//            Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Main.JEU.getJ1()?Main.JEU.getJ2():Main.JEU.getJ1());
+//            Main.JEU.setDesLances(false);
 
-            Main.JEU.bougerPion();
-
-            Main.JEU.setCol1(null);
-            Main.JEU.setCol2(null);
-
-        }
-        else {
-            IA.hasAiAlreadyPlayed = true;
-            Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Main.JEU.getJ1()?Main.JEU.getJ2():Main.JEU.getJ1());
-            Main.JEU.setDesLances(false);
-        }
     }
 
     abstract ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible);

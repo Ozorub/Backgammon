@@ -24,9 +24,6 @@ public class Jeu {
     static Boolean isEndGameBlack = false;
     private int nbPionsBlancGauche = 0;
     private int nbPionsNoirGauche = 0;
-    static boolean isSpecialEndGameWhite = false;
-    static boolean isSpecialEndGameBlack = false;
-
 
     /**
      * Constructeur de la classe Jeu
@@ -61,49 +58,25 @@ public class Jeu {
 
     void bougerPion() {
         try {
+            if(noMoreWhite()||noMoreBlack()){
+                Label lab = new Label(currentJoueur + "a gagné la partie");
+                plateau.dice.getChildren().add(lab);
 
+            }
             System.out.println("Tour de " + currentJoueur);
             System.out.println("Encore a jouer: " + resteDes.toString());
             ColonneDeJeu col1 = Main.JEU.getCol1();
             ColonneDeJeu col2 = Main.JEU.getCol2();
 
+            System.out.println(testEndgameWhite() + "rdrjfhqdfhgsdqu");
+
             //Aucun pions ailleurs que dans sa zone(pas en prison non plus)
             if (!isEndGameWhite) {
-                boolean intermediare = false;
-                for (int col = 0; col < BgPane.NBCOL; col++) {
-                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0) {
-                        intermediare= true;
-                    }
-                }if(plateau.getColonneDeJeu(plateau.grille, 1, 0).getNbPionsBlanc() == 0
-                        && plateau.getColonneDeJeu(plateau.grille, 1, 1).getNbPionsBlanc() == 0
-                        && plateau.getColonneDeJeu(plateau.grille, 1, 2).getNbPionsBlanc() == 0
-                        && plateau.getColonneDeJeu(plateau.grille, 1, 3).getNbPionsBlanc() == 0
-                        && plateau.getColonneDeJeu(plateau.grille, 1, 4).getNbPionsBlanc() == 0
-                        && plateau.getColonneDeJeu(plateau.grille, 1, 5).getNbPionsBlanc() == 0
-                        && plateau.getPrisonBlanc().getNbPionsBlanc() == 0
-                        && intermediare){
-                    isEndGameWhite = true;
-                }
+                if(testEndgameWhite()) isEndGameWhite = true;
             }
             if (!isEndGameBlack) {
-                boolean intermediaire = false ;
-                for (int col = 1; col < BgPane.NBCOL; col++) {
-                    if (plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsBlanc() == 0) {
-                        intermediaire = true ;
-                    }
-                    if(plateau.getColonneDeJeu(plateau.grille, 0, 0).getNbPionsNoir() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 0, 1).getNbPionsNoir() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 0, 2).getNbPionsNoir() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 0, 3).getNbPionsNoir() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 0, 4).getNbPionsNoir() == 0
-                            && plateau.getColonneDeJeu(plateau.grille, 0, 5).getNbPionsNoir() == 0
-                            && plateau.getPrisonNoir().getNbPionsNoir() == 0
-                            && intermediaire){
-                        isEndGameBlack = true;
-                    }
+                    if(testEndgameBlack()) isEndGameBlack = true;
                 }
-            }
-
 
             if (desLances) {
                 if (currentJoueur == Joueur.BLANC) {
@@ -125,11 +98,15 @@ public class Jeu {
                         }
                     } else {
                         //Endgame
+                        System.out.println( " ON EST LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?");
+                        System.out.println(col1.getNbPionsBlanc() + " Pions blancs");
                         if (col1.getNbPionsBlanc() == 0) {
-                            for (int col = col1.getCol(); col > col1.getCol() - 6; col--) {
+                            for (int col = col1.getCol(); col >= 6; --col) {
+                                System.out.println("A la colone " + col + " il y a " + plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() + " pions blancs");
                                 nbPionsBlancGauche += plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc();
                             }
-                            if (nbPionsBlancGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
+                            System.out.println(nbPionsBlancGauche + " Nb pions blancs à gauche");
+                            if (nbPionsBlancGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le plus à droite possible
                                 System.out.println("Je vais supprimer un pion");
 
                                 boolean firstTime2 = true;
@@ -141,20 +118,22 @@ public class Jeu {
                                 }
 
                             }
-                            int indexCol = 6;
-                            boolean colEmpty = true;
-                            while(colEmpty){
+                            else{
+                                int indexCol = 6;
+                                boolean colEmpty = true;
+                                while(colEmpty){
 
-                                if (plateau.getColonneDeJeu(plateau.grille, 1, indexCol).getNbPionsBlanc() != 0 ){
-                                    colEmpty = false;
+                                    if (plateau.getColonneDeJeu(plateau.grille, 1, indexCol).getNbPionsBlanc() != 0 ){
+                                        colEmpty = false;
 
-                                    setCol2(plateau.getColonneDeJeu(plateau.grille, 1,  indexCol+12-col1.getCol())); // Col1 et Col2 ne sont pas dépendantes, il est donc possible de reSet col2 en premier, lui donnant la valeur "de la première colonne non vide à droite + la valeur de la col1"
-                                    setCol1(plateau.getColonneDeJeu(plateau.grille, 1, indexCol));
+                                        setCol2(plateau.getColonneDeJeu(plateau.grille, 1,  indexCol+12-col1.getCol())); // Col1 et Col2 ne sont pas dépendantes, il est donc possible de reSet col2 en premier, lui donnant la valeur "de la première colonne non vide à droite + la valeur de la col1"
+                                        setCol1(plateau.getColonneDeJeu(plateau.grille, 1, indexCol));
 
-                                    deplacerPion(currentJoueur);
+                                        deplacerPion(currentJoueur);
+                                    }
+
+                                    indexCol ++;
                                 }
-
-                                indexCol ++;
                             }
 
                         }
@@ -162,6 +141,7 @@ public class Jeu {
 
                     }
                 } else if (currentJoueur == Joueur.NOIR) {
+
                     if(plateau.getPrisonNoir().getNbPionsNoir() != 0 ){
                         deplacerPionPrison(currentJoueur);
                     }
@@ -177,11 +157,16 @@ public class Jeu {
                         }
                     } else {
                         //Endgame
-
+                        System.out.println( " ON EST AUSSI LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?");
+                        System.out.println(col1.getNbPionsBlanc() + " Pions NOIRs");
                         if (col1.getNbPionsNoir() == 0) {
-                            for (int col = col1.getCol(); col > col1.getCol() - 6; col--) {
+                            for (int col = col1.getCol(); col >=  6; --col) {
+                                System.out.println("A la colone " + col + " il y a " + plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsNoir() + " pions noirs");
+
                                 nbPionsNoirGauche += plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir();
                             }
+                            System.out.println(nbPionsNoirGauche + " Nb pions noirs à gauche");
+
                             if (nbPionsNoirGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
                                 boolean firstTime2 = true;
                                 for (int col = col1.getCol(); col < col1.getCol() + Math.min(5, BgPane.NBCOL - col1.getCol()); col++) {
@@ -194,20 +179,22 @@ public class Jeu {
 
 
                             }
-                            int indexCol = 6;
-                            boolean colEmpty = true;
-                            while(colEmpty){
+                            else{
+                                int indexCol = 6;
+                                boolean colEmpty = true;
+                                while(colEmpty){
 
-                                if (plateau.getColonneDeJeu(plateau.grille, 0, indexCol).getNbPionsNoir() != 0 ){
-                                    colEmpty = false;
+                                    if (plateau.getColonneDeJeu(plateau.grille, 0, indexCol).getNbPionsNoir() != 0 ){
+                                        colEmpty = false;
 
-                                    setCol2(plateau.getColonneDeJeu(plateau.grille, 0,  indexCol+12-col1.getCol())); // Col1 et Col2 ne sont pas dépendantes, il est donc possible de reSet col2 en premier, lui donnant la valeur "de la première colonne non vide à droite + la valeur de la col1"
-                                    setCol1(plateau.getColonneDeJeu(plateau.grille, 0, indexCol));
+                                        setCol2(plateau.getColonneDeJeu(plateau.grille, 0,  indexCol+12-col1.getCol())); // Col1 et Col2 ne sont pas dépendantes, il est donc possible de reSet col2 en premier, lui donnant la valeur "de la première colonne non vide à droite + la valeur de la col1"
+                                        setCol1(plateau.getColonneDeJeu(plateau.grille, 0, indexCol));
 
-                                    deplacerPion(currentJoueur);
+                                        deplacerPion(currentJoueur);
+                                    }
+
+                                    indexCol ++;
                                 }
-
-                                indexCol ++;
                             }
                         }
                         supprPion(currentJoueur);
@@ -344,6 +331,70 @@ public class Jeu {
         }
     }
 
+    public boolean testEndgameWhite(){
+        return (plateau.getColonneDeJeu(plateau.grille, 1, 0).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 1).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 2).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 3).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 4).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 5).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 0).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 1).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 2).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 3).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 4).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 5).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 6).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 7).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 8).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 9).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 10).getNbPionsBlanc() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 11).getNbPionsBlanc() == 0
+                && plateau.getPrisonBlanc().getNbPionsBlanc() == 0);
+
+    }
+
+    public boolean testEndgameBlack(){
+        return plateau.getColonneDeJeu(plateau.grille, 0, 0).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 1).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 2).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 3).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 4).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 0, 5).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 0).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 1).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 2).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 3).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 4).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 5).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 6).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 7).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 8).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 9).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 10).getNbPionsNoir() == 0
+                && plateau.getColonneDeJeu(plateau.grille, 1, 11).getNbPionsNoir() == 0
+                && plateau.getPrisonNoir().getNbPionsNoir() == 0;
+    }
+
+    public boolean noMoreWhite() {
+        int nbWhite = 0;
+        for (int row = 0; row < BgPane.NBROW; row++) {
+            for (int col = 0; col < BgPane.NBCOL; col++) {
+                nbWhite += plateau.getColonneDeJeu(plateau.grille, row, col).getNbPionsBlanc();
+            }
+        }
+        return nbWhite == 0;
+    }
+    public boolean noMoreBlack(){
+            int nbBlack = 0;
+            for (int row = 0 ; row < BgPane.NBROW;row++){
+                for (int col = 0 ; col < BgPane.NBCOL ; col++){
+                    nbBlack += plateau.getColonneDeJeu(plateau.grille,row,col).getNbPionsNoir();
+                }
+            }
+            return nbBlack == 0;
+    }
+
     //A modifier si l'on souhaite un peu factoriser le code
 
 //    public void updateMouvPion(Joueur j, int coutDuMouv, int action, ColonneDeJeu colonneDeJeu) {
@@ -405,43 +456,7 @@ public class Jeu {
         return coutDuMouv;
     }
 
-    public int getNbPionsBlancGauche() {
-        return nbPionsBlancGauche;
-    }
 
-    public void setNbPionsBlancGauche(int nbPionsBlancGauche) {
-        this.nbPionsBlancGauche = nbPionsBlancGauche;
-    }
-
-    public int getNbPionsNoirGauche() {
-        return nbPionsNoirGauche;
-    }
-
-    public void setNbPionsNoirGauche(int nbPionsNoirGauche) {
-        this.nbPionsNoirGauche = nbPionsNoirGauche;
-    }
-
-
-    public static void setIsEndGameWhite(Boolean isEndGameWhite) {
-        Jeu.isEndGameWhite = isEndGameWhite;
-    }
-
-
-    public static void setIsEndGameBlack(Boolean isEndGameBlack) {
-        Jeu.isEndGameBlack = isEndGameBlack;
-
-
-    }
-
-
-    public static void setIsSpecialEndGameBlack(boolean isSpecialEndGameBlack) {
-        Jeu.isSpecialEndGameBlack = isSpecialEndGameBlack;
-    }
-
-
-    public static void setIsSpecialEndGameWhite(boolean isSpecialEndGameWhite) {
-        Jeu.isSpecialEndGameWhite = isSpecialEndGameWhite;
-    }
 
     public Joueur getCurrentJoueur() {
         return currentJoueur;

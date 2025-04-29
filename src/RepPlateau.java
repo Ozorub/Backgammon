@@ -2,6 +2,8 @@ import javafx.scene.control.Cell;
 
 public class RepPlateau {
     private Cellule[][] plateau = new Cellule[BgPane.NBROW][BgPane.NBCOL];
+    private Cellule prisonBlancs;
+    private Cellule prisonNoirs;
 
     public static class Cellule{
         private int nbPionsBlancs;
@@ -43,8 +45,10 @@ public class RepPlateau {
 
     }
 
-    public RepPlateau(Cellule[][] plateau){
+    public RepPlateau(Cellule[][] plateau, Cellule prisonBlancs, Cellule prisonNoirs){
         this.plateau = plateau;
+        this.prisonBlancs = prisonBlancs;
+        this.prisonNoirs = prisonNoirs;
     }
 
     public RepPlateau(){
@@ -54,6 +58,9 @@ public class RepPlateau {
                 plateau[row][col] = cel;
             }
         }
+        prisonBlancs = new Cellule(0,0);
+        prisonNoirs = new Cellule(0,0);
+
     }
 
     public void setColPlateau(int row, int col, boolean white, int nbPions){
@@ -95,6 +102,15 @@ public class RepPlateau {
         }
         return true;
     }
+
+    public Cellule getPrisonBlancs() {
+        return prisonBlancs;
+    }
+
+    public Cellule getPrisonNoirs() {
+        return prisonNoirs;
+    }
+
 
 
 }

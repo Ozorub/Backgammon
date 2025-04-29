@@ -218,6 +218,8 @@ public class ColonneDeJeu extends StackPane {
         this.updateGraphics();
         col2.updateGraphics();
 
+
+
     }
 
     /**

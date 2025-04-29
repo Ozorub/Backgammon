@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static Jeu JEU;
+    public static JeuMath JEUMATH;
     public static JoueurClass joueur_blanc;
     public static JoueurClass joueur_noir;
 
@@ -104,6 +105,7 @@ public class Main extends Application {
         stage.setTitle("Backgammon du tonnerre");
 
         JEU = new Jeu();
+        JEUMATH = new JeuMath();
         Scene scene = new Scene(JEU.getPlateau());
 
         stage.setResizable(false);
