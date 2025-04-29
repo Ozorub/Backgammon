@@ -13,6 +13,7 @@ public class Jeu {
     private final Joueur j1 = Joueur.BLANC;
     private final Joueur j2 = Joueur.NOIR;
     private static final PaireDeDes des = new PaireDeDes();
+
     private boolean desLances = false;
     private ArrayList<Integer> resteDes = new ArrayList<>();
     private Joueur currentJoueur = j1;
@@ -232,9 +233,11 @@ public class Jeu {
                 desLances = false;
 
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
-
-
                 System.out.println("joueur have switched");
+            }
+                }
+
+
             }
 //            //TEST
 //            synchronized (IA.getLock()) {
@@ -244,8 +247,6 @@ public class Jeu {
 //                    IA.getLock().notifyAll();
 //                }
 //            }
-        }
-    }
 
     public void deplacerPionPrison(Joueur j){
         if(col1.getCol()==100){ // gestion de la prison
@@ -471,5 +472,8 @@ public class Jeu {
     }
     public Joueur getJ2() {
         return j2;
+    }
+    public boolean isDesLances() {
+        return desLances;
     }
 }

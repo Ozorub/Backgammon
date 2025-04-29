@@ -22,6 +22,7 @@ public class BgPane extends BorderPane {
     private final ColonneDeJeu prisonBlanc;
     private final ColonneDeJeu prisonNoir;
     private RepPlateau plateau;
+    private Button lancer;
 
 
     public ColonneDeJeu getPrisonNoir() {
@@ -31,6 +32,7 @@ public class BgPane extends BorderPane {
     public ColonneDeJeu getPrisonBlanc() {
         return prisonBlanc;
     }
+
 
 
 
@@ -84,7 +86,7 @@ public class BgPane extends BorderPane {
 
         Label de1 = new Label("Dé 1: pas lancé");
         Label de2 = new Label("Dé 2: pas lancé");
-        Button lancer = getButtonLancer(de1, de2);
+        lancer = getButtonLancer(de1, de2);
 
 
         dice.getChildren().addAll(de1,de2,lancer, new Label("Les blancs commencent"));
@@ -97,8 +99,6 @@ public class BgPane extends BorderPane {
         Button lancer = new Button("Lancer les dés");
 
         lancer.setOnAction(v -> {
-            if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc.getClass() == Human.class
-                    ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir.getClass() == Human.class) {
                 if (Main.JEU.getResteDes().isEmpty()) {
                     Main.JEU.lancerDes();
                     de1.setText("Dé 1 : "+ Jeu.valeurDes()[0]);
@@ -121,7 +121,6 @@ public class BgPane extends BorderPane {
                         //TODO : retourner au joueur suivant
                     }
                 }
-            }
         });
         return lancer;
     }
@@ -212,6 +211,10 @@ public class BgPane extends BorderPane {
         return colonnes;
     }
 
+
+    public Button getLancer() {
+        return lancer;
+    }
 
 }
 

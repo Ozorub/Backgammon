@@ -18,7 +18,8 @@ import javafx.scene.shape.Rectangle;
 public class ColonneDeJeu extends StackPane {
     Rectangle fond;
     Polygon triangle;
-    VBox vBox;
+
+    private VBox vBox;
     double HEIGHT = 370.;
     double WIDTH = 90.;
     ImageView rond;
@@ -291,5 +292,10 @@ public class ColonneDeJeu extends StackPane {
                 "row=" + row +
                 ", col=" + col +
                 '}';
+    }
+
+
+    public VBox getvBox() {
+        return vBox;
     }
 }
