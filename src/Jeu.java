@@ -1,8 +1,12 @@
+import javafx.animation.PauseTransition;
 import javafx.scene.control.Label;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Classe Jeu
@@ -28,6 +32,7 @@ public class Jeu {
     private int nbPionsNoirGauche = 0;
     private Runnable onPionBougeCallback;
     private boolean iaALanceLesDes = false;
+    private boolean isFisrtMouvOfTheGame = true;
 
 
     /**
@@ -63,6 +68,7 @@ public class Jeu {
 
     void bougerPion() {
         try {
+
             if(noMoreWhite()||noMoreBlack()){
                 Label lab = new Label(currentJoueur + "a gagné la partie");
                 plateau.dice.getChildren().add(lab);
@@ -75,7 +81,7 @@ public class Jeu {
             System.out.println("1er ColDeJeu : " + col1 + ", 2e colDeJeu : "+ col2);
 
 
-            System.out.println(testEndgameWhite() + "   c'est le test de l'endgame");
+//            System.out.println(testEndgameWhite() + "   c'est le test de l'endgame");
 
             //Aucun pions ailleurs que dans sa zone(pas en prison non plus)
             if (!isEndGameWhite) {
@@ -245,40 +251,71 @@ public class Jeu {
 
                 currentJoueur = (currentJoueur == Joueur.BLANC) ? j2 : j1;
                 System.out.println("player have switched");
-                if (Main.isJoueurBlancIA || Main.isJoueurNoirIA){
-                    System.out.println("Je suis une IA");
-                    if (!iaALanceLesDes) {
-                        getPlateau().getLancer().fire();
-                        iaALanceLesDes = true;
-                    }
-
-                    while (!resteDes.isEmpty()) {
-                        try {
-                                col1 = null;
-                                col2 = null;
-                                Main.ia.makeAmove();
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-
-                        }
-                    }
-                    iaALanceLesDes = false;
-
-
+                if (Main.isJoueurBlancIA || Main.isJoueurNoirIA) {
+                    makeAiPlay();
                 }
             }
         }
 
 
     }
-//            //TEST
-//            synchronized (IA.getLock()) {
-//                if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc instanceof IA
-//                        ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir instanceof IA) {
-//                    IA.setHasAiAlreadyPlayed(false);
-//                    IA.getLock().notifyAll();
-//                }
-//            }
+
+    public void makeAiPlay() {
+        System.out.println("Avant de jouer, j'ai lancé les dès : " + iaALanceLesDes);
+        if (!iaALanceLesDes) {
+            getPlateau().getLancer().fire();
+            iaALanceLesDes = true;
+        }
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event -> {
+            if (!resteDes.isEmpty()) {
+                col1 = null;
+                col2 = null;
+                try {
+                    Main.ia.makeAmove();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Rejoue après 1 seconde
+                pause.playFromStart();
+            } else {
+                // Les dés sont vides, on arrête
+                iaALanceLesDes = false;
+                System.out.println("Les dés sont épuisés, IA a terminé son tour.");
+            }
+        });
+
+        pause.play();
+
+        if ((currentJoueur == Joueur.BLANC && Main.isJoueurBlancIA)
+                || (currentJoueur == Joueur.NOIR && Main.isJoueurNoirIA)) {
+
+            try {
+                Main.ia.makeAmove();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            // Petite pause pour laisser le temps d'affichage du coup
+            PauseTransition pause1 = new PauseTransition(Duration.seconds(0.5));
+            pause1.setOnFinished(event -> nextTurn());
+            pause1.play();
+        }
+
+    }
+
+    public void nextTurn() {
+        currentJoueur = (currentJoueur == j1) ? j2 : j1; //changement de joueur
+
+        if ((currentJoueur == Joueur.BLANC && Main.isJoueurBlancIA) ||
+                (currentJoueur == Joueur.NOIR && Main.isJoueurNoirIA)) {
+            makeAiPlay();
+        }
+    }
+
 
     public void deplacerPionPrison(Joueur j){
         if(col1.getCol()==100){ // gestion de la prison
@@ -509,7 +546,4 @@ public class Jeu {
         return desLances;
     }
 
-    public void setOnPionBougeCallback(Runnable callback) {
-        this.onPionBougeCallback = callback;
-    }
 }

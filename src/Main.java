@@ -78,14 +78,14 @@ public class Main extends Application {
             stage.close();
 
             ouvrirJeu();
-            /**
-             * TODO : Si l'ia commence, ce sera ici qu'il faudra le gérer
-             */
-//            IA ia = new IA_easy_baby(); // ou un autre contrôleur
-//            ia.calculerEtAfficherCoups();
 
             joueur_blanc = extractJoueurFromToggle(group1);
             joueur_noir = extractJoueurFromToggle(group2);
+            if(isJoueurBlancIA) {
+                System.out.println("le joueur blanc est une ia" + true);
+                JEU.makeAiPlay();
+
+                }
         });
 
         root.setBottom(ok);
@@ -96,6 +96,7 @@ public class Main extends Application {
         stage.sizeToScene();
 
         stage.show();
+
 
     }
 
@@ -159,12 +160,15 @@ public class Main extends Application {
 
         JEU = new Jeu();
         //JEUMATH = new JeuMath();
+
         Scene scene = new Scene(JEU.getPlateau());
 
         stage.setResizable(false);
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();
+
+
     }
 
 

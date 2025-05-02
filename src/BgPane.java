@@ -119,6 +119,7 @@ public class BgPane extends BorderPane {
                     }
                     else {
                         //TODO : retourner au joueur suivant
+
                     }
                 }
         });
