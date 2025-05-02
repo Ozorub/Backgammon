@@ -8,6 +8,10 @@ public class IA_easy_baby extends IA{
 
     @Override
     ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible) {
+        if (coutsPossible == null || coutsPossible.isEmpty()) {
+            System.out.println("Aucun coup reçu dans getBestMove !");
+            return new ColonneDeJeu[0]; // ou null selon le cas
+        }
         return coutsPossible.getFirst();
     }
 

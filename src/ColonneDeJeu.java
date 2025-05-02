@@ -8,6 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
+import java.util.List;
+
 
 /**
  * Classe représentant une colonne de jeu
@@ -27,6 +29,11 @@ public class ColonneDeJeu extends StackPane {
     private int col;
     private int nbPionsNoir = 0;
     private int nbPionsBlanc = 0;
+    private List<ColonneDeJeu[]> coupsPossibles ;
+
+    public List<ColonneDeJeu[]> getCoupsPossibles() {
+        return coupsPossibles;
+    }
 
 
     public void setRow(int row) {
@@ -90,10 +97,9 @@ public class ColonneDeJeu extends StackPane {
 
         this.updateGraphics();
 
-
         vBox.setOnMouseClicked(event -> {
             try {
-
+                System.out.println("clic détecté");
                 if (Main.JEU.getCurrentJoueur() == Joueur.BLANC && Main.joueur_blanc.getClass() == Human.class
                         ||Main.JEU.getCurrentJoueur() == Joueur.NOIR && Main.joueur_noir.getClass() == Human.class) {
                     if (Main.JEU.getCol1() == null) {
@@ -105,8 +111,8 @@ public class ColonneDeJeu extends StackPane {
 
                     }
                     if (Main.JEU.getCol1() != null && Main.JEU.getCol2() != null) {
+                        System.out.println("je ne devrais pas etre la si je suis une ia");
                         Main.JEU.bougerPion();
-
                         Main.JEU.setCol1(null);
                         Main.JEU.setCol2(null);
 
@@ -129,7 +135,7 @@ public class ColonneDeJeu extends StackPane {
      * Attention : ne vérifie pas que le coup est valide par rapport au lancer de dés !!!
      */
     protected void updateColonne(Joueur j, ColonneDeJeu col2, int ajout_supr) {
-        if (ajout_supr == 1) {
+        if (ajout_supr == 1) { // deplacement
             if (j == Joueur.BLANC) { // Si le joueur est blanc
                 if (this.nbPionsBlanc == 0) {
                     System.out.println("Pas de pions blancs dans cette colonne");
@@ -151,9 +157,9 @@ public class ColonneDeJeu extends StackPane {
                         this.nbPionsBlanc--;
                         col2.nbPionsBlanc++;
 
-                        //System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-                        //System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-                        //System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+//                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+//                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+//                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
 
                          Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv())); // a faire, un if avec un getcoutdumouv !=100
                     }
@@ -179,15 +185,16 @@ public class ColonneDeJeu extends StackPane {
                         this.nbPionsNoir--;
                         col2.nbPionsNoir++;
 
-//                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
-//                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
-//                        System.out.println("tableau cout :" + Main.JEU.getResteDes().toString());
+                        System.out.println("cout joue :" + Main.JEU.getCoutDuMouv());
+                        System.out.println("index cout joue :" + Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+                        System.out.println("tableau cout avant :" + Main.JEU.getResteDes().toString());
 
                         Main.JEU.getResteDes().remove(Main.JEU.getResteDes().lastIndexOf(Main.JEU.getCoutDuMouv()));
+
                     }
                 }
             }
-        } else {
+        } else { // suppression
             if (j == Joueur.BLANC) { // Si le joueur est blanc
                 if (this.nbPionsBlanc == 0) {
                     System.out.println("Pas de pions blancs dans cette colonne");

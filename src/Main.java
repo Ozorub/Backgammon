@@ -11,9 +11,12 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static Jeu JEU;
-    public static JeuMath JEUMATH;
+    //public static JeuMath JEUMATH;
     public static JoueurClass joueur_blanc;
     public static JoueurClass joueur_noir;
+    public static boolean isJoueurBlancIA = false;
+    public static boolean isJoueurNoirIA = false;
+    public static IA ia;
 
     @Override
     public void start(Stage stage){
@@ -34,6 +37,7 @@ public class Main extends Application {
 
         // Group radio buttons so only one can be selected at a time
         ToggleGroup group1 = new ToggleGroup();
+        group1.setUserData("group1");
         option1j1.setToggleGroup(group1);
         option2j1.setToggleGroup(group1);
         option3j1.setToggleGroup(group1);
@@ -57,6 +61,7 @@ public class Main extends Application {
 
         // Group radio buttons so only one can be selected at a time
         ToggleGroup group2 = new ToggleGroup();
+        group2.setUserData("group2");
         option1j2.setToggleGroup(group2);
         option2j2.setToggleGroup(group2);
         option3j2.setToggleGroup(group2);
@@ -73,6 +78,11 @@ public class Main extends Application {
             stage.close();
 
             ouvrirJeu();
+            /**
+             * TODO : Si l'ia commence, ce sera ici qu'il faudra le gérer
+             */
+//            IA ia = new IA_easy_baby(); // ou un autre contrôleur
+//            ia.calculerEtAfficherCoups();
 
             joueur_blanc = extractJoueurFromToggle(group1);
             joueur_noir = extractJoueurFromToggle(group2);
@@ -91,12 +101,55 @@ public class Main extends Application {
 
     private JoueurClass extractJoueurFromToggle(ToggleGroup group2) {
         return switch (group2.getSelectedToggle().getUserData().toString()) {
-            case "IA facile" -> new IA_easy_baby();
-            case "IA intermédiaire" -> new IA_intermediate();
-            case "IA difficile" -> new IA_hard();
-            default -> new Human();
+            case "IA facile" -> {
+                System.out.println("Création d'une IA facile...");
+                ia = new IA_easy_baby();
+                if (group2.getUserData().equals("group1")) {
+                    ia.setCurrentJoueur(Joueur.BLANC);
+                    isJoueurBlancIA = true;
+                }
+                else {
+                    ia.setCurrentJoueur(Joueur.NOIR);
+                    isJoueurNoirIA = true;
+
+                }
+                yield ia;
+            }
+            case "IA intermédiaire" -> {
+                System.out.println("Création d'une IA intermédiaire...");
+                ia = new IA_intermediate();
+                if (group2.getUserData().equals("group1")) {
+                    ia.setCurrentJoueur(Joueur.BLANC);
+                    isJoueurBlancIA = true;
+                }
+                else {
+                    ia.setCurrentJoueur(Joueur.NOIR);
+                    isJoueurNoirIA = true;
+                }
+                yield ia;
+            }
+            case "IA difficile" -> {
+                System.out.println("Création d'une IA difficile...");
+                ia = new IA_hard();
+                if (group2.getUserData().equals("group1")) {
+                    ia.setCurrentJoueur(Joueur.BLANC);
+                    isJoueurBlancIA = true;
+                }
+                else {
+                    ia.setCurrentJoueur(Joueur.NOIR);
+                    isJoueurNoirIA = true;
+
+                }
+                yield ia;
+            }
+            default -> {
+                System.out.println("Création d'un joueur humain...");
+                Human human = new Human();
+                yield human;
+            }
         };
     }
+
 
     private void ouvrirJeu(){
 
@@ -105,7 +158,7 @@ public class Main extends Application {
         stage.setTitle("Backgammon du tonnerre");
 
         JEU = new Jeu();
-        JEUMATH = new JeuMath();
+        //JEUMATH = new JeuMath();
         Scene scene = new Scene(JEU.getPlateau());
 
         stage.setResizable(false);
