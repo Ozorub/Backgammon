@@ -8,6 +8,8 @@ public class RepPlateau {
     public static class Cellule{
         private int nbPionsBlancs;
         private int nbPionsNoirs;
+        private int row = -1;
+        private int col = -1;
 
         public Cellule(int nbPionsBlancs, int nbPionsNoirs){
             this.nbPionsBlancs = nbPionsBlancs;
@@ -19,6 +21,13 @@ public class RepPlateau {
             else nbPionsNoirs = nbPions ;
         }
 
+        public int getCol() {
+            return col;
+        }
+
+        public int getRow() {
+            return row;
+        }
 
 
         @Override
@@ -43,12 +52,14 @@ public class RepPlateau {
         }
 
 
+
     }
 
     public RepPlateau(Cellule[][] plateau, Cellule prisonBlancs, Cellule prisonNoirs){
         this.plateau = plateau;
         this.prisonBlancs = prisonBlancs;
         this.prisonNoirs = prisonNoirs;
+        this.setCelluleRowAndCol();
     }
 
     public RepPlateau(){
@@ -60,7 +71,16 @@ public class RepPlateau {
         }
         prisonBlancs = new Cellule(0,0);
         prisonNoirs = new Cellule(0,0);
+        this.setCelluleRowAndCol();
+    }
 
+    private void setCelluleRowAndCol(){
+        for (int row = 0 ; row < BgPane.NBROW;row++){
+            for (int col = 0 ; col < BgPane.NBCOL ; col++){
+                plateau[row][col].row = row;
+                plateau[row][col].col = col;
+            }
+        }
     }
 
     public void setColPlateau(int row, int col, boolean white, int nbPions){
@@ -70,12 +90,22 @@ public class RepPlateau {
     public RepPlateau deplacementPion(int rowD, int colD, int rowA, int colA, boolean white){
         RepPlateau repPlateau = this;
         if(white) {
-            repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsBlancs);
-            repPlateau.setColPlateau(rowA, colA, white, ++repPlateau.getCell(rowA, colA).nbPionsBlancs);
+            if (rowA == 50 && colA == 50) {
+                repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsBlancs);
+            }
+            else {
+                repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsBlancs);
+                repPlateau.setColPlateau(rowA, colA, white, ++repPlateau.getCell(rowA, colA).nbPionsBlancs);
+            }
         }
         else {
-            repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsNoirs);
-            repPlateau.setColPlateau(rowA, colA, white, ++repPlateau.getCell(rowA, colA).nbPionsNoirs);
+            if (rowA == 50 && colA == 50) {
+                repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsNoirs);
+            }
+            else {
+                repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsNoirs);
+                repPlateau.setColPlateau(rowA, colA, white, ++repPlateau.getCell(rowA, colA).nbPionsNoirs);
+            }
         }
 
         return repPlateau;
@@ -112,5 +142,24 @@ public class RepPlateau {
     }
 
 
+    public boolean isEndGameBlack(){
+        if (prisonNoirs.getNbPionsNoirs() != 0) return false;
+        for (int row = 0 ; row < BgPane.NBROW;row++){
+            for (int col = 0 ; col < BgPane.NBCOL ; col++){
+                if(getCell(row,col).getNbPionsNoirs() != 0 && (row == 1 || col < 6)) return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isEndGameWhite(){
+        if (prisonBlancs.getNbPionsBlancs() != 0) return false;
+        for (int row = 0 ; row < BgPane.NBROW;row++){
+            for (int col = 0 ; col < BgPane.NBCOL ; col++){
+                if(getCell(row,col).getNbPionsBlancs() != 0 && (row == 0 || col < 6)) return false;
+            }
+        }
+        return true;
+    }
 
 }

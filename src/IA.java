@@ -146,7 +146,7 @@ public abstract class IA extends JoueurClass {
         PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
-        if (terminalTest(coupsPossibles, plateau)) return 0; //TODO :calcul de la valeur de l'état terminal
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
 
         //on trouve le minimum des coups possibles
         int v = Integer.MIN_VALUE;
