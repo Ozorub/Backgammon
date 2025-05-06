@@ -161,6 +161,67 @@ public abstract class IA extends JoueurClass {
         return v;
     }
 
+
+    public ColonneDeJeu[] alphaBetaDecision(List<ColonneDeJeu[]> coupsPossibles, RepPlateau plateau, Joueur j) {
+
+        ArrayList<Integer> values = new ArrayList<>(coupsPossibles.size());
+        coupsPossibles.forEach(coupWesh -> {
+            int rowD = coupWesh[0].getRow();
+            int colD = coupWesh[0].getCol();
+            int rowA = coupWesh[1].getRow();
+            int colA = coupWesh[1].getCol();
+
+            values.add(maxValue(plateau.deplacementPion(rowD, colD, rowA, colA, j == Joueur.BLANC), j == Joueur.NOIR ? Joueur.BLANC : Joueur.NOIR, Integer.MIN_VALUE, Integer.MAX_VALUE));
+        });
+        return coupsPossibles.get(values.indexOf(max(values)));
+    }
+
+    public int minValue(RepPlateau plateau, Joueur j, int alpha, int beta) {
+        //calcul de tous les coups possibles
+        List<int[]> coupsPossibles = new ArrayList<>();
+        PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
+
+        //on vérifie si on est dans un etat terminal
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
+
+        //on trouve le minimum des coups possibles
+        int v = Integer.MAX_VALUE;
+        for (int[] coup : coupsPossibles) {
+            int rowD = coup[1];
+            int colD = coup[2];
+            int rowA = coup[3];
+            int colA = coup[4];
+
+            v = Integer.min(v, (maxValue(plateau.deplacementPion(rowD, colD, rowA, colA, j == Joueur.BLANC), j == Joueur.NOIR ? Joueur.BLANC : Joueur.NOIR, alpha, beta)));
+            if (v <= alpha) return v;
+            beta = Integer.min(beta, v);
+        }
+        return v;
+    }
+
+    public int maxValue(RepPlateau plateau, Joueur j, int alpha, int beta) {
+        //calcul de tous les coups possibles
+        List<int[]> coupsPossibles = new ArrayList<>();
+        PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
+
+        //on vérifie si on est dans un etat terminal
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
+
+        //on trouve le minimum des coups possibles
+        int v = Integer.MIN_VALUE;
+        for (int[] coup : coupsPossibles) {
+            int rowD = coup[1];
+            int colD = coup[2];
+            int rowA = coup[3];
+            int colA = coup[4];
+
+            v = Integer.max(v, (minValue(plateau.deplacementPion(rowD, colD, rowA, colA, j == Joueur.BLANC), j == Joueur.NOIR ? Joueur.BLANC : Joueur.NOIR, alpha, beta)));
+            if (v >= beta) return v;
+            alpha = Integer.max(alpha, v);
+        }
+        return v;
+    }
+
     public boolean terminalTest(List<int[]> coupsPossible, RepPlateau plateau) {
         if (coupsPossible.isEmpty() || plateau.whiteWin() || plateau.blackWin()) {
             return true;
