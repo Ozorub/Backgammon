@@ -107,8 +107,18 @@ public class RepPlateau {
     public RepPlateau deplacementPion(int rowD, int colD, int rowA, int colA, boolean white){
         RepPlateau repPlateau = this;
         if(white) {
-            if (rowA == 50 && colA == 50) {
+            if (rowA == 200 && colA == 200) {
                 repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsBlancs);
+            }
+            else if ((rowA == 100  && colA == 100) || (rowD == 100  && colD == 100)){
+                if (rowA == 100 && colA == 100) {
+                    repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsBlancs);
+                    repPlateau.prisonBlancs.nbPionsBlancs++;
+                }
+                else{
+                    repPlateau.setColPlateau(rowA, colA, white, ++repPlateau.getCell(rowA, colA).nbPionsBlancs);
+                    repPlateau.prisonBlancs.nbPionsBlancs--;
+                }
             }
             else {
                 repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsBlancs);
@@ -116,8 +126,18 @@ public class RepPlateau {
             }
         }
         else {
-            if (rowA == 50 && colA == 50) {
+            if (rowA == 200 && colA == 200) {
                 repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsNoirs);
+            }
+            else if ((rowA == 100  && colA == 100) || (rowD == 100  && colD == 100)){
+                if (rowA == 100 && colA == 100) {
+                    repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsNoirs);
+                    repPlateau.prisonNoirs.nbPionsNoirs++;
+                }
+                else{
+                    repPlateau.setColPlateau(rowA, colA, white, ++repPlateau.getCell(rowA, colA).nbPionsNoirs);
+                    repPlateau.prisonBlancs.nbPionsNoirs--;
+                }
             }
             else {
                 repPlateau.setColPlateau(rowD, colD, white, --repPlateau.getCell(rowD, colD).nbPionsNoirs);

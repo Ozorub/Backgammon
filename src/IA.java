@@ -16,6 +16,8 @@ public abstract class IA extends JoueurClass {
     private final Joueur j1 = Joueur.BLANC;
     private final Joueur j2 = Joueur.NOIR;
     private Joueur currentJoueur = j1;
+    private static int MAX_DEPTH = 5;
+    private int currentDepth = 0;
 
 
     public IA() {
@@ -30,6 +32,13 @@ public abstract class IA extends JoueurClass {
             System.out.println("YEAHHHHqqqqqqq" + "Reste dès : " + jeu.getResteDes());
             CoupsPossibles coupsPossiblesClass = new CoupsPossibles();
             List<ColonneDeJeu[]> coupsPossibles = coupsPossiblesClass.calculCoupsPossibles(jeu.getCurrentJoueur(), jeu.getResteDes());
+
+//            if (coupsPossibles.isEmpty()) {
+//                System.out.println("Aucun coup possible !");
+//                Main.JEU.setDesLances(false);
+//                Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Joueur.BLANC ? Main.JEU.getJ2() : Main.JEU.getJ1());
+//                return;
+//            }
 
             System.out.println("Coups possibles générés : " + coupsPossibles.size());
             for (ColonneDeJeu[] coup : coupsPossibles) {
@@ -109,12 +118,14 @@ public abstract class IA extends JoueurClass {
         }
 
         //TODO : implementer un niveau de profondeur dans minmax et alphabeta ?
+        currentDepth = 0;
         return alphaBetaDecision(coutsPossible,new RepPlateau(Main.JEU.getPlateau()),Main.JEU.getCurrentJoueur());
     }
 
     public abstract int calculGain(RepPlateau plateau, int[] dep_arr, boolean isWhite);
 
     public ColonneDeJeu[] minMaxdecision(List<ColonneDeJeu[]> coupsPossibles, RepPlateau plateau, Joueur j) {
+        currentDepth++;
         ArrayList<Integer> values = new ArrayList<>(coupsPossibles.size());
         coupsPossibles.forEach(coupWesh -> {
             int rowD = coupWesh[0].getRow();
@@ -128,12 +139,13 @@ public abstract class IA extends JoueurClass {
     }
 
     public int minValue(RepPlateau plateau, Joueur j) {
+        currentDepth++;
         //calcul de tous les coups possibles
         List<int[]> coupsPossibles = new ArrayList<>();
         PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
-        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, new int[]{0,0,0,0}, j == Joueur.BLANC); // TODO : regler le dep_arr qui est null
 
         //on trouve le minimum des coups possibles
         int v = Integer.MAX_VALUE;
@@ -149,12 +161,13 @@ public abstract class IA extends JoueurClass {
     }
 
     public int maxValue(RepPlateau plateau, Joueur j) {
+        currentDepth++;
         //calcul de tous les coups possibles
         List<int[]> coupsPossibles = new ArrayList<>();
         PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
-        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, new int[]{0,0,0,0}, j == Joueur.BLANC); // TODO : regler le dep_arr qui est null
 
         //on trouve le minimum des coups possibles
         int v = Integer.MIN_VALUE;
@@ -171,7 +184,7 @@ public abstract class IA extends JoueurClass {
 
 
     public ColonneDeJeu[] alphaBetaDecision(List<ColonneDeJeu[]> coupsPossibles, RepPlateau plateau, Joueur j) {
-
+        currentDepth++;
         ArrayList<Integer> values = new ArrayList<>(coupsPossibles.size());
         coupsPossibles.forEach(coupWesh -> {
             int rowD = coupWesh[0].getRow();
@@ -185,20 +198,21 @@ public abstract class IA extends JoueurClass {
     }
 
     public int minValue(RepPlateau plateau, Joueur j, int alpha, int beta) {
+        currentDepth++;
         //calcul de tous les coups possibles
         List<int[]> coupsPossibles = new ArrayList<>();
         PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
-        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, new int[]{0,0,0,0}, j == Joueur.BLANC); // TODO : regler le dep_arr qui est null
 
         //on trouve le minimum des coups possibles
         int v = Integer.MAX_VALUE;
         for (int[] coup : coupsPossibles) {
-            int rowD = coup[1];
-            int colD = coup[2];
-            int rowA = coup[3];
-            int colA = coup[4];
+            int rowD = coup[0];
+            int colD = coup[1];
+            int rowA = coup[2];
+            int colA = coup[3];
 
             v = Integer.min(v, (maxValue(plateau.deplacementPion(rowD, colD, rowA, colA, j == Joueur.BLANC), j == Joueur.NOIR ? Joueur.BLANC : Joueur.NOIR, alpha, beta)));
             if (v <= alpha) return v;
@@ -208,20 +222,21 @@ public abstract class IA extends JoueurClass {
     }
 
     public int maxValue(RepPlateau plateau, Joueur j, int alpha, int beta) {
+        currentDepth++;
         //calcul de tous les coups possibles
         List<int[]> coupsPossibles = new ArrayList<>();
         PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
-        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, null, j == Joueur.BLANC);
+        if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, new int[]{0,0,0,0}, j == Joueur.BLANC); // TODO : regler le dep_arr qui est null
 
         //on trouve le minimum des coups possibles
         int v = Integer.MIN_VALUE;
         for (int[] coup : coupsPossibles) {
-            int rowD = coup[1];
-            int colD = coup[2];
-            int rowA = coup[3];
-            int colA = coup[4];
+            int rowD = coup[0];
+            int colD = coup[1];
+            int rowA = coup[2];
+            int colA = coup[3];
 
             v = Integer.max(v, (minValue(plateau.deplacementPion(rowD, colD, rowA, colA, j == Joueur.BLANC), j == Joueur.NOIR ? Joueur.BLANC : Joueur.NOIR, alpha, beta)));
             if (v >= beta) return v;
@@ -231,10 +246,7 @@ public abstract class IA extends JoueurClass {
     }
 
     public boolean terminalTest(List<int[]> coupsPossible, RepPlateau plateau) {
-        if (coupsPossible.isEmpty() || plateau.whiteWin() || plateau.blackWin()) {
-            return true;
-        }
-        return false;
+        return coupsPossible.isEmpty() || plateau.whiteWin() || plateau.blackWin() || currentDepth >= MAX_DEPTH;
 
     }
 

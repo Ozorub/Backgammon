@@ -236,7 +236,7 @@ public class CoupsPossibles {
         //autrement
         else{
             for (int row = 0; row < 2; row++){
-                for (int column = 0; column < 13; column++) {
+                for (int column = 0; column < 12; column++) {
 
                     RepPlateau.Cellule col = plateau.getCell(row, column);
 
@@ -254,18 +254,20 @@ public class CoupsPossibles {
 
         ArrayList<int[]> coupsPossibles = new ArrayList<>();
 
+        //if (col == null) return coupsPossibles;
+
         if (col.equals(plateau.getPrisonBlancs()) || col.equals(plateau.getPrisonNoirs())){ //prison
             for (int j = 0; j < 2 ; j++) {
-                for (int i = 6; i < 13; i++) {
+                for (int i = 5; i < 12; i++) {
                     if (joueur == Joueur.BLANC){
                         RepPlateau.Cellule colonne = plateau.getCell(j,i);
-                        if(j == 0 && colonne.getNbPionsNoirs() <= 1 && Arrays.stream(desAJouer).anyMatch( de -> de == 12 - colonne.getCol())){
+                        if(j == 0 && colonne.getNbPionsNoirs() <= 1 && Arrays.stream(desAJouer).anyMatch( de -> de == 11 - colonne.getCol())){
                             coupsPossibles.add(new int[]{col.getRow(), col.getCol(), j, i});
                         }
                     }
                     else if(joueur == Joueur.NOIR){
                         RepPlateau.Cellule colonne = plateau.getCell(j,i);
-                        if(j == 0 && colonne.getNbPionsBlancs() <= 1 && Arrays.stream(desAJouer).anyMatch( de -> de == 12 - colonne.getCol())){
+                        if(j == 0 && colonne.getNbPionsBlancs() <= 1 && Arrays.stream(desAJouer).anyMatch( de -> de == 11 - colonne.getCol())){
                             coupsPossibles.add(new int[]{col.getRow(), col.getCol(), j, i});
                         }
                     }
@@ -278,8 +280,8 @@ public class CoupsPossibles {
         else{ //autre : cas général
             for (int i : desAJouer) { //pour toutes les valeurs de dés restantes
 
-                for (int row = 0; row < 2; row++){ //pour toutes les colonnes
-                    for (int column = 0; column < 13; column++) {
+                for (int row = 0; row < 2; row++){ //pour toutes les lignes
+                    for (int column = 0; column < 12; column++) {
 
                         RepPlateau.Cellule col2 = plateau.getCell(row, column);
 
