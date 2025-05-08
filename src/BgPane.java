@@ -118,8 +118,9 @@ public class BgPane extends BorderPane {
                         Main.JEU.setResteDes(nouvelleListe);
                     }
                     else {
-                        //TODO : retourner au joueur suivant
-
+                        Main.JEU.setDesLances(false);
+                        Main.JEU.setResteDes(new ArrayList<>());
+                        Main.JEU.setCurrentJoueur(Main.JEU.getCurrentJoueur() == Joueur.BLANC ? Main.JEU.getJ2() : Main.JEU.getJ1());
                     }
                 }
         });

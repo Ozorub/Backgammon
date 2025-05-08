@@ -1,5 +1,7 @@
 import javafx.scene.control.Cell;
 
+import java.util.List;
+
 public class RepPlateau {
     private Cellule[][] plateau = new Cellule[BgPane.NBROW][BgPane.NBCOL];
     private Cellule prisonBlancs;
@@ -72,6 +74,21 @@ public class RepPlateau {
         prisonBlancs = new Cellule(0,0);
         prisonNoirs = new Cellule(0,0);
         this.setCelluleRowAndCol();
+    }
+
+    public RepPlateau(BgPane bgPane){
+        List<ColonneDeJeu> colDeJeu = bgPane.getAllColonnesDeJeu();
+        for (int col = 0 ; col < BgPane.NBCOL ; col++){
+            for (int row = 0 ; row < BgPane.NBROW;row++){
+                Cellule cel = new Cellule(colDeJeu.get(col + row ).getNbPionsBlanc(),colDeJeu.get(col + row ).getNbPionsNoir());
+                plateau[row][col] = cel;
+
+                plateau[row][col].row = row;
+                plateau[row][col].col = col;
+            }
+        }
+        prisonBlancs = new Cellule(bgPane.getPrisonBlanc().getNbPionsBlanc(),bgPane.getPrisonBlanc().getNbPionsNoir());
+        prisonNoirs = new Cellule(bgPane.getPrisonNoir().getNbPionsBlanc(),bgPane.getPrisonNoir().getNbPionsNoir());
     }
 
     private void setCelluleRowAndCol(){

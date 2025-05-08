@@ -102,7 +102,15 @@ public abstract class IA extends JoueurClass {
     }
 
 
-    abstract ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible);
+    public ColonneDeJeu[] getBestMove(List<ColonneDeJeu[]> coutsPossible){
+        if (coutsPossible == null || coutsPossible.isEmpty()) {
+            System.out.println("Aucun coup reçu dans getBestMove !");
+            return new ColonneDeJeu[0]; // ou null selon le cas
+        }
+
+        //TODO : implementer un niveau de profondeur dans minmax et alphabeta ?
+        return alphaBetaDecision(coutsPossible,new RepPlateau(Main.JEU.getPlateau()),Main.JEU.getCurrentJoueur());
+    }
 
     public abstract int calculGain(RepPlateau plateau, int[] dep_arr, boolean isWhite);
 
