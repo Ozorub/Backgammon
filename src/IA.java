@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import static java.lang.Integer.min;
+
+import static java.lang.Integer.*;
 import static java.lang.Thread.sleep;
 import static java.util.Collections.max;
 
@@ -16,9 +17,9 @@ public abstract class IA extends JoueurClass {
     private final Joueur j1 = Joueur.BLANC;
     private final Joueur j2 = Joueur.NOIR;
     private Joueur currentJoueur = j1;
-    private static int MAX_DEPTH = 5;
     private int currentDepth = 0;
 
+    private int MAX_DEPTH = 0;
 
     public IA() {
 
@@ -117,8 +118,8 @@ public abstract class IA extends JoueurClass {
             return new ColonneDeJeu[0]; // ou null selon le cas
         }
 
-        //TODO : implementer un niveau de profondeur dans minmax et alphabeta ?
         currentDepth = 0;
+
         return alphaBetaDecision(coutsPossible,new RepPlateau(Main.JEU.getPlateau()),Main.JEU.getCurrentJoueur());
     }
 
@@ -185,6 +186,34 @@ public abstract class IA extends JoueurClass {
 
     public ColonneDeJeu[] alphaBetaDecision(List<ColonneDeJeu[]> coupsPossibles, RepPlateau plateau, Joueur j) {
         currentDepth++;
+
+        if(j == Joueur.BLANC){
+            switch (Main.jBlancLevel) {
+                case 1:
+                    MAX_DEPTH = IA_easy_baby.getMaxDepth();
+                    break;
+                case 2:
+                    MAX_DEPTH = IA_intermediate.getMaxDepth();
+                    break;
+                case 3:
+                    MAX_DEPTH = IA_hard.getMaxDepth();
+                    break;
+            }
+        }
+        else if(j == Joueur.NOIR){
+            switch (Main.jNoirLevel) {
+                case 1:
+                    MAX_DEPTH = IA_easy_baby.getMaxDepth();
+                    break;
+                case 2:
+                    MAX_DEPTH = IA_intermediate.getMaxDepth();
+                    break;
+                case 3:
+                    MAX_DEPTH = IA_hard.getMaxDepth();
+                    break;
+            }
+        }
+
         ArrayList<Integer> values = new ArrayList<>(coupsPossibles.size());
         coupsPossibles.forEach(coupWesh -> {
             int rowD = coupWesh[0].getRow();
@@ -246,6 +275,7 @@ public abstract class IA extends JoueurClass {
     }
 
     public boolean terminalTest(List<int[]> coupsPossible, RepPlateau plateau) {
+        //System.out.println("MAXDEPTH : " + MAX_DEPTH);
         return coupsPossible.isEmpty() || plateau.whiteWin() || plateau.blackWin() || currentDepth >= MAX_DEPTH;
 
     }

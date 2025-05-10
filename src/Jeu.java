@@ -95,7 +95,7 @@ public class Jeu {
             if (desLances) {
                 if (currentJoueur == Joueur.BLANC) {
                     if(plateau.getPrisonBlanc().getNbPionsBlanc() !=0){
-                        System.out.println("Prisosososososososososoos");
+//                        System.out.println("Prisosososososososososoos");
                         deplacerPionPrison(currentJoueur);
                     }
 
@@ -112,16 +112,16 @@ public class Jeu {
                         }
                     } else {
                         //Endgame
-                        System.out.println( " ON EST LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?");
-                        System.out.println(col1.getNbPionsBlanc() + " Pions blancs");
+//                        System.out.println( " ON EST LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?");
+//                        System.out.println(col1.getNbPionsBlanc() + " Pions blancs");
                         if (col1.getNbPionsBlanc() == 0) {
                             for (int col = col1.getCol(); col >= 6; --col) {
-                                System.out.println("A la colone " + col + " il y a " + plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() + " pions blancs");
+//                                System.out.println("A la colone " + col + " il y a " + plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc() + " pions blancs");
                                 nbPionsBlancGauche += plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsBlanc();
                             }
-                            System.out.println(nbPionsBlancGauche + " Nb pions blancs à gauche");
+//                            System.out.println(nbPionsBlancGauche + " Nb pions blancs à gauche");
                             if (nbPionsBlancGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le plus à droite possible
-                                System.out.println("Je vais supprimer un pion");
+//                                System.out.println("Je vais supprimer un pion");
 
                                 boolean firstTime2 = true;
                                 for (int col = col1.getCol(); col < col1.getCol() + Math.min(5, BgPane.NBCOL - col1.getCol()); col++) {
@@ -171,15 +171,15 @@ public class Jeu {
                         }
                     } else {
                         //Endgame
-                        System.out.println( " ON EST AUSSI LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?");
-                        System.out.println(col1.getNbPionsBlanc() + " Pions NOIRs");
+//                        System.out.println( " ON EST AUSSI LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?");
+//                        System.out.println(col1.getNbPionsBlanc() + " Pions NOIRs");
                         if (col1.getNbPionsNoir() == 0) {
                             for (int col = col1.getCol(); col >=  6; --col) {
-                                System.out.println("A la colone " + col + " il y a " + plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsNoir() + " pions noirs");
+//                                System.out.println("A la colone " + col + " il y a " + plateau.getColonneDeJeu(plateau.grille, 1, col).getNbPionsNoir() + " pions noirs");
 
                                 nbPionsNoirGauche += plateau.getColonneDeJeu(plateau.grille, 0, col).getNbPionsNoir();
                             }
-                            System.out.println(nbPionsNoirGauche + " Nb pions noirs à gauche");
+//                            System.out.println(nbPionsNoirGauche + " Nb pions noirs à gauche");
 
                             if (nbPionsNoirGauche == 0) { // choix de conception : il faut quand même appuyer sur le "bon endroit" mais ça enlève le pion le moins à droite possible
                                 boolean firstTime2 = true;
@@ -320,7 +320,7 @@ public class Jeu {
     public void deplacerPionPrison(Joueur j){
         if(col1.getCol()==100){ // gestion de la prison
             coutDuMouv = 12- col2.getCol();
-            System.out.println("Je suis en prison triste vie");
+//            System.out.println("Je suis en prison triste vie");
             if(currentJoueur == Joueur.NOIR && col2.getNbPionsBlanc() <=1 && resteDes.contains(coutDuMouv) && col2.getRow()==1 ){
                 col1.updateColonne(currentJoueur,col2,1);
             } else if (currentJoueur == Joueur.BLANC && col2.getNbPionsNoir() <=1 && resteDes.contains(coutDuMouv) && col2.getRow() == 0 ) {

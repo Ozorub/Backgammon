@@ -4,6 +4,11 @@ import java.util.List;
 
 public class IA_easy_baby extends IA{
 
+    public static int getMaxDepth(){
+        return 1;
+    }
+
+
     public IA_easy_baby(){
         super();
     }

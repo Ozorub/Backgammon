@@ -2,6 +2,11 @@ import java.util.List;
 
 public class IA_intermediate extends IA{
 
+    public static int getMaxDepth(){
+        return 5;
+    }
+
+
     public IA_intermediate() {
         super();
     }
