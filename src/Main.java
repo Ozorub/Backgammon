@@ -17,6 +17,9 @@ public class Main extends Application {
     public static boolean isJoueurBlancIA = false;
     public static boolean isJoueurNoirIA = false;
     public static IA ia;
+    public static int jBlancLevel = 1;
+    public static int jNoirLevel = 1;
+
 
     @Override
     public void start(Stage stage){
@@ -122,10 +125,12 @@ public class Main extends Application {
                 if (group2.getUserData().equals("group1")) {
                     ia.setCurrentJoueur(Joueur.BLANC);
                     isJoueurBlancIA = true;
+                    jBlancLevel = 2;
                 }
                 else {
                     ia.setCurrentJoueur(Joueur.NOIR);
                     isJoueurNoirIA = true;
+                    jNoirLevel = 2;
                 }
                 yield ia;
             }
@@ -135,10 +140,12 @@ public class Main extends Application {
                 if (group2.getUserData().equals("group1")) {
                     ia.setCurrentJoueur(Joueur.BLANC);
                     isJoueurBlancIA = true;
+                    jBlancLevel = 3;
                 }
                 else {
                     ia.setCurrentJoueur(Joueur.NOIR);
                     isJoueurNoirIA = true;
+                    jNoirLevel = 3;
 
                 }
                 yield ia;
