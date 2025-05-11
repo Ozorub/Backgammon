@@ -32,7 +32,7 @@ public class Jeu {
     private int nbPionsNoirGauche = 0;
     private Runnable onPionBougeCallback;
     private boolean iaALanceLesDes = false;
-    private boolean isFisrtMouvOfTheGame = true;
+    private final boolean isFisrtMouvOfTheGame = true;
 
 
     /**

@@ -1,4 +1,7 @@
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class IACombat {
 
@@ -12,7 +15,24 @@ public class IACombat {
             for (int i = 0; i < 3; i++) {
                 for (int j = i+1; j < 3; j++) {
                     System.out.println("Combat entre IA de niveau " + i + " et IA de niveau " + j);
-                    int result = combat(i, j);
+                    boolean result = combat(i, j);
+                    if (result) {
+                        if (i == 0 && j == 1) {
+                            easyVSinter[0]++;
+                        } else if (i == 0 && j == 2) {
+                            easyVShard[0]++;
+                        } else if (i == 1 && j == 2) {
+                            interVShard[0]++;
+                        }
+                    } else {
+                        if (i == 0 && j == 1) {
+                            easyVSinter[1]++;
+                        } else if (i == 0 && j == 2) {
+                            easyVShard[1]++;
+                        } else if (i == 1 && j == 2) {
+                            interVShard[1]++;
+                        }
+                    }
                     System.out.println("Résultat du combat: " + result);
                 }
             }
@@ -27,7 +47,7 @@ public class IACombat {
     }
 
 
-    private static int combat(int IALevel1, int IALevel2){
+    private static boolean combat(int IALevel1, int IALevel2){
         IA ia1 = null;
         IA ia2 = null;
         switch (IALevel1) {
@@ -44,10 +64,53 @@ public class IACombat {
             default -> throw new IllegalArgumentException("Invalid level: " + IALevel2);
         }
 
-        // Simulate the combat between the two AI players
-        // Return the result of the combat
+        return simulateCombat(ia1, ia2); // Placeholder for actual combat result
+    }
 
-        return 0; // Placeholder for actual combat result
+
+    private static boolean simulateCombat(IA ia1, IA ia2) {
+        RepPlateau plateau = new RepPlateau();
+
+        plateau.getCell(0,0).setNbPionsBlancs(5);
+        plateau.getCell(0,4).setNbPionsNoirs(3);
+        plateau.getCell(0,6).setNbPionsNoirs(5);
+        plateau.getCell(0,11).setNbPionsBlancs(2);
+        plateau.getCell(1,0).setNbPionsNoirs(5);
+        plateau.getCell(1,4).setNbPionsBlancs(3);
+        plateau.getCell(1,6).setNbPionsBlancs(5);
+        plateau.getCell(1,11).setNbPionsNoirs(2);
+
+        Joueur j = Joueur.BLANC;
+
+        while (!(plateau.blackWin() || plateau.whiteWin())) {
+
+            int[] des = new PaireDeDes().lancerLesDes();
+            List<int[]> coupsPossibles = new CoupsPossibles(true).coupsPossibleRepPlateau(j, plateau, des);
+            while (!coupsPossibles.isEmpty()) {
+                int[] bestMove = j==Joueur.BLANC? ia1.alphaBetaDecisionRepPlateau(coupsPossibles, plateau, j) : ia2.alphaBetaDecisionRepPlateau(coupsPossibles, plateau, j);
+                plateau.deplacementPion(bestMove[0], bestMove[1], bestMove[2], bestMove[3], j == Joueur.BLANC);
+
+                int coutDuMouv = 0;
+                if (bestMove[0] == bestMove[2]) { // if row are identical
+                    coutDuMouv = Math.abs(bestMove[1] - bestMove[3]);
+                } else if (bestMove[1] <= 15 || bestMove[3] <= 15) { // if rows are not identical, but not prison or endgame
+                    coutDuMouv = bestMove[1] + bestMove[3] + 1;
+                }
+                else{ //prison or endgame
+                    coutDuMouv = 6 - bestMove[1];
+                }
+                List<Integer> desTemp = new ArrayList<>();
+                for (int i = 0; i < des.length; i++) {
+                    if (des[i] != coutDuMouv) {
+                        desTemp.add(des[i]);
+                    }
+                }
+                des = desTemp.stream().mapToInt(i -> i).toArray();
+                coupsPossibles = new CoupsPossibles(true).coupsPossibleRepPlateau(j, plateau, des);
+            }
+            j =  (j == Joueur.BLANC) ? Joueur.NOIR : Joueur.BLANC;
+        }
+        return plateau.whiteWin();
     }
 
 }

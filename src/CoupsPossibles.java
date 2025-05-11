@@ -12,7 +12,9 @@ public class CoupsPossibles {
         allCols = Main.JEU.getPlateau().getAllColonnesDeJeu();
     }
 
-
+    public CoupsPossibles(boolean issimulated) {
+        allCols = null;
+    }
 
     /**
      * Calcul les coups possibles pour un joueur

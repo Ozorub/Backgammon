@@ -226,11 +226,53 @@ public abstract class IA extends JoueurClass {
         return coupsPossibles.get(values.indexOf(max(values)));
     }
 
+    public int[] alphaBetaDecisionRepPlateau(List<int[]> coupsPossibles, RepPlateau plateau, Joueur j) {
+        currentDepth++;
+
+        if(j == Joueur.BLANC){
+            switch (Main.jBlancLevel) {
+                case 1:
+                    MAX_DEPTH = IA_easy_baby.getMaxDepth();
+                    break;
+                case 2:
+                    MAX_DEPTH = IA_intermediate.getMaxDepth();
+                    break;
+                case 3:
+                    MAX_DEPTH = IA_hard.getMaxDepth();
+                    break;
+            }
+        }
+        else if(j == Joueur.NOIR){
+            switch (Main.jNoirLevel) {
+                case 1:
+                    MAX_DEPTH = IA_easy_baby.getMaxDepth();
+                    break;
+                case 2:
+                    MAX_DEPTH = IA_intermediate.getMaxDepth();
+                    break;
+                case 3:
+                    MAX_DEPTH = IA_hard.getMaxDepth();
+                    break;
+            }
+        }
+
+        ArrayList<Integer> values = new ArrayList<>(coupsPossibles.size());
+        coupsPossibles.forEach(coupWesh -> {
+            int rowD = coupWesh[0];
+            int colD = coupWesh[1];
+            int rowA = coupWesh[2];
+            int colA = coupWesh[3];
+
+            values.add(maxValue(plateau.deplacementPion(rowD, colD, rowA, colA, j == Joueur.BLANC), j == Joueur.NOIR ? Joueur.BLANC : Joueur.NOIR, Integer.MIN_VALUE, Integer.MAX_VALUE));
+        });
+        return coupsPossibles.get(values.indexOf(max(values)));
+    }
+
     public int minValue(RepPlateau plateau, Joueur j, int alpha, int beta) {
         currentDepth++;
         //calcul de tous les coups possibles
         List<int[]> coupsPossibles = new ArrayList<>();
-        PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
+        PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles(true).coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
         if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, new int[]{0,0,0,0}, j == Joueur.BLANC); // TODO : regler le dep_arr qui est null
@@ -254,7 +296,7 @@ public abstract class IA extends JoueurClass {
         currentDepth++;
         //calcul de tous les coups possibles
         List<int[]> coupsPossibles = new ArrayList<>();
-        PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles().coupsPossibleRepPlateau(j, plateau, des)));
+        PaireDeDes.ALL_DES_POSSIBLES.forEach(des -> coupsPossibles.addAll(new CoupsPossibles(true).coupsPossibleRepPlateau(j, plateau, des)));
 
         //on vérifie si on est dans un etat terminal
         if (terminalTest(coupsPossibles, plateau)) return calculGain(plateau, new int[]{0,0,0,0}, j == Joueur.BLANC); // TODO : regler le dep_arr qui est null

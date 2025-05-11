@@ -21,8 +21,8 @@ public class BgPane extends BorderPane {
     VBox prisons = new VBox();
     private final ColonneDeJeu prisonBlanc;
     private final ColonneDeJeu prisonNoir;
-    private RepPlateau plateau;
-    private Button lancer;
+    private final RepPlateau plateau;
+    private final Button lancer;
 
 
     public ColonneDeJeu getPrisonNoir() {

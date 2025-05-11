@@ -1,3 +1,3 @@
 public enum Joueur {
-    NOIR,BLANC;
+    NOIR,BLANC
 }

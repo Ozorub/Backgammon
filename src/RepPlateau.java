@@ -4,8 +4,8 @@ import java.util.List;
 
 public class RepPlateau {
     private Cellule[][] plateau = new Cellule[BgPane.NBROW][BgPane.NBCOL];
-    private Cellule prisonBlancs;
-    private Cellule prisonNoirs;
+    private final Cellule prisonBlancs;
+    private final Cellule prisonNoirs;
 
     public static class Cellule{
         private int nbPionsBlancs;
